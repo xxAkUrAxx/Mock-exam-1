@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listening Instructions – Mock Test 1</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    .student-info {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: left;
+      padding: 0 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .content h2 {
+      margin-bottom: 30px;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .instructions {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background-color: transparent;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .student-info {
+        text-align: left;
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Wall Street English Logo" class="logo" />
+    <div class="student-info" id="studentInfo">Loading student info...</div>
+  </div>
+
+  <div class="content">
+    <h2>Instructions – Listening Test</h2>
+    <div class="instructions">
+      <p>1. Please fill out all the questions before clicking the Next Section button.</p>
+      <p>2. The audio will be played one time only; please answer the questions as you go.</p>
+      <p>3. Each section will be time stamped.</p>
+      <p>4. The test consists of 4 sections or parts.</p>
+      <p>5. At the end of the test your answers will be submitted to the teacher and you will receive your band score immediately upon completing the test.</p>
+    </div>
+    <button class="btn" onclick="startTest()">Begin Section 1</button>
+  </div>
+
+  <script>
+    // Load student info from localStorage
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const surname = localStorage.getItem("studentSurname") || "Student";
+    const studentNo = localStorage.getItem("studentNumber") || "N/A";
+
+    document.getElementById("studentInfo").textContent =
+      `${name} | ${surname} | ${studentNo}`;
+
+    function startTest() {
+      window.location.href = "listening-part1.html";
+    }
+  </script>
+</body>
+</html>

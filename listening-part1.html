@@ -15,8 +15,8 @@
     .header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
+      align-items: flex-start;
+      padding: 20px 40px 10px;
       border-bottom: 1px solid #ddd;
     }
 
@@ -25,9 +25,17 @@
     }
 
     .student-info {
+      text-align: right;
       font-size: 16px;
       font-weight: 500;
       color: #333;
+    }
+
+    .timer {
+      font-size: 14px;
+      margin-top: 5px;
+      color: #d00;
+      font-weight: bold;
     }
 
     .container {
@@ -45,12 +53,6 @@
       margin: 20px 0;
       font-style: italic;
       font-size: 15px;
-    }
-
-    audio {
-      display: block;
-      margin: 20px 0;
-      width: 100%;
     }
 
     input[type="text"] {
@@ -92,25 +94,48 @@
       background-color: #000;
       color: #fff;
     }
+
+    .play-button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 25px;
+      border: 2px solid #007BFF;
+      background-color: #007BFF;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    audio {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="header">
     <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Logo" class="logo" />
-    <div class="student-info" id="studentInfo">Loading student info...</div>
+    <div class="student-info">
+      <div id="studentInfo">Loading...</div>
+      <div class="timer" id="timer">Time Left: 11:00</div>
+    </div>
   </div>
 
   <div class="container">
     <h2>Listening – Part 1</h2>
     <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> for each answer.</p>
 
-    <audio controls>
+    <!-- Play Button and Audio -->
+    <button id="playBtn" class="play-button">▶ Play Audio</button>
+    <audio id="audioPlayer">
       <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test%201%20-%20Part%201.mp3" type="audio/mp3">
       Your browser does not support the audio element.
     </audio>
 
     <!-- Questions 1–5 -->
+    <form id="testForm">
     <table>
       <tr>
         <th colspan="2">KT Furniture<br><strong>Customer Order Form</strong></th>
@@ -136,7 +161,11 @@
       </tr>
       <tr>
         <td><strong>Delivery option:</strong></td>
-        <td>☐ 1 ☐ 2 (no 4. <input type="text" name="q4" />)</td>
+        <td>
+          <label><input type="checkbox" disabled /> 1</label>
+          <label><input type="checkbox" checked disabled /> 2</label>
+          (no 4. <input type="text" name="q4" />)
+        </td>
       </tr>
       <tr>
         <td><strong>Method of payment:</strong></td>
@@ -183,21 +212,60 @@
       </tr>
     </table>
 
-    <button class="submit-btn" onclick="submitAnswers()">Submit Section</button>
+    <button class="submit-btn" type="submit">Submit Section</button>
+    </form>
   </div>
 
   <script>
-    // Populate student info from localStorage
+    // Display student info
     const name = localStorage.getItem("studentName") || "Unknown";
     const surname = localStorage.getItem("studentSurname") || "Student";
     const studentNo = localStorage.getItem("studentNumber") || "N/A";
-
     document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
 
-    function submitAnswers() {
-      alert("Answers submitted! (You can later connect this to scoring or the next section.)");
-      // Redirect or process answers here...
+    // Timer Logic
+    const timerEl = document.getElementById("timer");
+    const playBtn = document.getElementById("playBtn");
+    const audio = document.getElementById("audioPlayer");
+    const form = document.getElementById("testForm");
+
+    let timeLeft = 660; // 11 minutes = 660 seconds
+    let timerInterval;
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, "0")}`;
     }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          disableForm();
+          alert("Time's up! This section is now closed.");
+        }
+      }, 1000);
+    }
+
+    function disableForm() {
+      const inputs = form.querySelectorAll("input[type='text']");
+      inputs.forEach(input => input.disabled = true);
+    }
+
+    playBtn.addEventListener("click", () => {
+      audio.play();
+      playBtn.style.display = "none";
+      startTimer();
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Answers submitted! (Storage or navigation can be added here.)");
+    });
   </script>
 </body>
 </html>

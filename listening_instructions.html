@@ -41,7 +41,7 @@
       align-items: center;
       text-align: left;
       padding: 0 20px;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
     }
 
@@ -56,6 +56,10 @@
       font-size: 16px;
       line-height: 1.8;
       margin-bottom: 40px;
+    }
+
+    .instructions strong {
+      font-weight: 700;
     }
 
     .btn {
@@ -74,15 +78,20 @@
       color: #fff;
     }
 
+    ul {
+      margin: 10px 0 30px;
+      padding-left: 20px;
+    }
+
+    ul li {
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 768px) {
       .header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-      }
-
-      .student-info {
-        text-align: left;
       }
 
       .content {
@@ -99,13 +108,27 @@
 
   <div class="content">
     <h2>Instructions – Listening Test</h2>
+
     <div class="instructions">
-      <p>1. Please fill out all the questions before clicking the Next Section button.</p>
-      <p>2. The audio will be played one time only; please answer the questions as you go.</p>
-      <p>3. Each section will be time stamped.</p>
-      <p>4. The test consists of 4 sections or parts.</p>
-      <p>5. At the end of the test your answers will be submitted to the teacher and you will receive your band score immediately upon completing the test.</p>
+      <strong>INFORMATION FOR CANDIDATES</strong>
+      <ul>
+        <li>There are <strong>four parts</strong> to the test.</li>
+        <li>You will hear each part <strong>once</strong> only.</li>
+        <li>There are <strong>40 questions</strong>.</li>
+        <li>Each question carries <strong>one mark</strong>.</li>
+        <li>For each part of the test, there will be time to read through the questions and check your answers.</li>
+      </ul>
+
+      <strong>IMPORTANT TEST INSTRUCTIONS</strong>
+      <ol>
+        <li>Please fill out <strong>all the questions</strong> before continuing.</li>
+        <li>The audio will be played <strong>once only</strong>, so answer as you go.</li>
+        <li>Each section is <strong>timed</strong> and you’ll only have one chance to complete it.</li>
+        <li>A <strong>Continue</strong> button will appear automatically when your time is up.</li>
+        <li>After completing all four sections, your answers will be <strong>submitted to the teacher</strong>, and you will receive your <strong>band score immediately</strong>.</li>
+      </ol>
     </div>
+
     <button class="btn" onclick="startTest()">Begin Section 1</button>
   </div>
 

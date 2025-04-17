@@ -101,12 +101,12 @@
     <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> for each answer.</p>
 
     <button id="playBtn" class="play-button">▶ Play Audio</button>
+    <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
     <audio id="audioPlayer">
       <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test1_Part1.mp3" type="audio/mp3" />
     </audio>
 
     <form id="testForm">
-      <!-- Questions 1–5 Table (as per your layout) -->
       <table>
         <tr><th colspan="2">KT Furniture<br><strong>Customer Order Form</strong></th></tr>
         <tr><td><strong>Caller’s name:</strong></td><td>Example: <em>Sue Brown</em></td></tr>
@@ -117,7 +117,6 @@
         <tr><td><strong>Method of payment:</strong></td><td>Credit card – Type 5. <input type="text" name="q5" /></td></tr>
       </table>
 
-      <!-- Questions 6–10 Table -->
       <p style="margin-top: 40px;"><strong>Questions 6–10</strong><br/>Complete the table notes below. Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.</p>
       <table>
         <tr><th>Item</th><th>Code</th><th>Colour</th><th>Quantity</th></tr>
@@ -130,6 +129,7 @@
       <button class="submit-btn" type="submit">Submit Section</button>
     </form>
   </div>
+
   <script>
     const name = localStorage.getItem("studentName") || "Unknown";
     const surname = localStorage.getItem("studentSurname") || "Student";
@@ -138,6 +138,7 @@
 
     const timerEl = document.getElementById("timer");
     const playBtn = document.getElementById("playBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
     const audio = document.getElementById("audioPlayer");
     const form = document.getElementById("testForm");
 
@@ -189,11 +190,23 @@
     }
 
     playBtn.addEventListener("click", () => {
+      audio.currentTime = 0;
       audio.play();
       playBtn.style.display = "none";
+      resumeBtn.style.display = "none";
       localStorage.setItem("listeningPart1Started", "true");
-      localStorage.setItem("listeningPart1AudioTime", audio.currentTime);
       startTimer();
+    });
+
+    resumeBtn.addEventListener("click", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart1AudioTime") || "0");
+      const resumeTime = Math.max(0, lastTime - 3);
+      audio.currentTime = resumeTime;
+      audio.play();
+      resumeBtn.style.display = "none";
+      let storedTimeLeft = parseInt(localStorage.getItem("listeningPart1TimeLeft") || "660");
+      let adjustedTime = storedTimeLeft - 3;
+      startTimer(Math.max(0, adjustedTime));
     });
 
     audio.addEventListener("timeupdate", () => {
@@ -202,8 +215,8 @@
 
     audio.addEventListener("seeking", () => {
       const lastTime = parseFloat(localStorage.getItem("listeningPart1AudioTime") || "0");
-      if (audio.currentTime < lastTime) {
-        audio.currentTime = lastTime;
+      if (audio.currentTime < lastTime - 3) {
+        audio.currentTime = lastTime - 3;
       }
     });
 
@@ -211,11 +224,8 @@
       restoreAnswers();
       const started = localStorage.getItem("listeningPart1Started") === "true";
       if (started) {
-        const savedTime = parseFloat(localStorage.getItem("listeningPart1AudioTime") || "0");
-        const timeLeftStored = parseInt(localStorage.getItem("listeningPart1TimeLeft") || "660");
-        audio.currentTime = savedTime;
         playBtn.style.display = "none";
-        startTimer(timeLeftStored);
+        resumeBtn.style.display = "block";
       }
     });
 

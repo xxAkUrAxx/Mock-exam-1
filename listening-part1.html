@@ -216,56 +216,67 @@
     </form>
   </div>
 
-  <script>
-    // Display student info
-    const name = localStorage.getItem("studentName") || "Unknown";
-    const surname = localStorage.getItem("studentSurname") || "Student";
-    const studentNo = localStorage.getItem("studentNumber") || "N/A";
-    document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
+ <script>
+  // Display student info
+  const name = localStorage.getItem("studentName") || "Unknown";
+  const surname = localStorage.getItem("studentSurname") || "Student";
+  const studentNo = localStorage.getItem("studentNumber") || "N/A";
+  document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
 
-    // Timer Logic
-    const timerEl = document.getElementById("timer");
-    const playBtn = document.getElementById("playBtn");
-    const audio = document.getElementById("audioPlayer");
-    const form = document.getElementById("testForm");
+  const timerEl = document.getElementById("timer");
+  const playBtn = document.getElementById("playBtn");
+  const audio = document.getElementById("audioPlayer");
+  const form = document.getElementById("testForm");
 
-    let timeLeft = 660; // 11 minutes = 660 seconds
-    let timerInterval;
+  let timeLeft = 660; // 11 minutes
+  let timerInterval;
 
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, "0")}`;
-    }
+  function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
 
-    function startTimer() {
+  function collectAnswers() {
+    const answers = {};
+    const inputs = form.querySelectorAll("input[type='text']");
+    inputs.forEach(input => {
+      answers[input.name] = input.value.trim();
+    });
+    localStorage.setItem("listeningPart1Answers", JSON.stringify(answers));
+  }
+
+  function disableForm() {
+    const inputs = form.querySelectorAll("input[type='text']");
+    inputs.forEach(input => input.disabled = true);
+  }
+
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      timeLeft--;
       updateTimerDisplay();
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          disableForm();
-          alert("Time's up! This section is now closed.");
-        }
-      }, 1000);
-    }
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        collectAnswers();       // ✅ Save answers on timeout
+        disableForm();
+        alert("Time's up! This section is now closed.");
+      }
+    }, 1000);
+  }
 
-    function disableForm() {
-      const inputs = form.querySelectorAll("input[type='text']");
-      inputs.forEach(input => input.disabled = true);
-    }
+  playBtn.addEventListener("click", () => {
+    audio.play();
+    playBtn.style.display = "none";
+    startTimer();
+  });
 
-    playBtn.addEventListener("click", () => {
-      audio.play();
-      playBtn.style.display = "none";
-      startTimer();
-    });
-
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-      alert("Answers submitted! (Storage or navigation can be added here.)");
-    });
-  </script>
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    collectAnswers();           // ✅ Save answers on manual submit
+    alert("Answers submitted! (Ready for scoring or next section.)");
+    // You can redirect here later if needed
+  });
+</script>
 </body>
 </html>

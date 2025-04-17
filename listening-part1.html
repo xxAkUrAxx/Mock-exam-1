@@ -102,7 +102,7 @@
 
     <button id="playBtn" class="play-button">▶ Play Audio</button>
     <audio id="audioPlayer">
-      <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test%201%20-%20Part%201.mp3" type="audio/mp3" />
+      <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test1_Part1.mp3" type="audio/mp3" />
     </audio>
 
     <form id="testForm">
@@ -159,16 +159,26 @@
       localStorage.setItem("listeningPart1Answers", JSON.stringify(answers));
     }
 
+    function restoreAnswers() {
+      const saved = JSON.parse(localStorage.getItem("listeningPart1Answers") || "{}");
+      Object.entries(saved).forEach(([key, val]) => {
+        const el = form.querySelector(`[name="${key}"]`);
+        if (el) el.value = val;
+      });
+    }
+
     function disableForm() {
       const inputs = form.querySelectorAll("input[type='text']");
       inputs.forEach(input => input.disabled = true);
     }
 
-    function startTimer() {
+    function startTimer(remaining = 660) {
+      timeLeft = remaining;
       updateTimerDisplay();
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
+        localStorage.setItem("listeningPart1TimeLeft", timeLeft);
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           collectAnswers();
@@ -181,7 +191,32 @@
     playBtn.addEventListener("click", () => {
       audio.play();
       playBtn.style.display = "none";
+      localStorage.setItem("listeningPart1Started", "true");
+      localStorage.setItem("listeningPart1AudioTime", audio.currentTime);
       startTimer();
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      localStorage.setItem("listeningPart1AudioTime", audio.currentTime);
+    });
+
+    audio.addEventListener("seeking", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart1AudioTime") || "0");
+      if (audio.currentTime < lastTime) {
+        audio.currentTime = lastTime;
+      }
+    });
+
+    window.addEventListener("load", () => {
+      restoreAnswers();
+      const started = localStorage.getItem("listeningPart1Started") === "true";
+      if (started) {
+        const savedTime = parseFloat(localStorage.getItem("listeningPart1AudioTime") || "0");
+        const timeLeftStored = parseInt(localStorage.getItem("listeningPart1TimeLeft") || "660");
+        audio.currentTime = savedTime;
+        playBtn.style.display = "none";
+        startTimer(timeLeftStored);
+      }
     });
 
     form.addEventListener("submit", function(e) {
@@ -192,4 +227,3 @@
   </script>
 </body>
 </html>
-

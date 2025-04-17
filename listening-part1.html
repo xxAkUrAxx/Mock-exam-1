@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listening – Part 1</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    .student-info {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .instructions {
+      margin: 20px 0;
+      font-style: italic;
+      font-size: 15px;
+    }
+
+    audio {
+      display: block;
+      margin: 20px 0;
+      width: 100%;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 200px;
+      padding: 6px 10px;
+      font-size: 15px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+    }
+
+    td, th {
+      border: 1px solid #999;
+      padding: 10px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    .submit-btn {
+      display: block;
+      margin: 40px auto 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background-color: transparent;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Logo" class="logo" />
+    <div class="student-info" id="studentInfo">Loading student info...</div>
+  </div>
+
+  <div class="container">
+    <h2>Listening – Part 1</h2>
+    <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> for each answer.</p>
+
+    <audio controls>
+      <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test%201%20-%20Part%201.mp3" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+
+    <!-- Questions 1–5 -->
+    <table>
+      <tr>
+        <th colspan="2">KT Furniture<br><strong>Customer Order Form</strong></th>
+      </tr>
+      <tr>
+        <td><strong>Caller’s name:</strong></td>
+        <td>Example: <em>Sue Brown</em></td>
+      </tr>
+      <tr>
+        <td><strong>Company name:</strong></td>
+        <td>1. <input type="text" name="q1" /></td>
+      </tr>
+      <tr>
+        <td><strong>Address:</strong></td>
+        <td>
+          2. <input type="text" name="q2" /> Trading Estate,<br/>
+          210 New Hampton Road<br/>South Down
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Contact number:</strong></td>
+        <td>3. <input type="text" name="q3" /> (mobile)</td>
+      </tr>
+      <tr>
+        <td><strong>Delivery option:</strong></td>
+        <td>☐ 1 ☐ 2 (no 4. <input type="text" name="q4" />)</td>
+      </tr>
+      <tr>
+        <td><strong>Method of payment:</strong></td>
+        <td>Credit card – Type 5. <input type="text" name="q5" /></td>
+      </tr>
+    </table>
+
+    <!-- Questions 6–10 -->
+    <p style="margin-top: 40px;">
+      <strong>Questions 6–10</strong><br/>
+      Complete the table notes below. Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.
+    </p>
+
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Code</th>
+        <th>Colour</th>
+        <th>Quantity</th>
+      </tr>
+      <tr>
+        <td>Office chairs</td>
+        <td>ASP 23</td>
+        <td>6. <input type="text" name="q6" /></td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>7. <input type="text" name="q7" /></td>
+        <td>8. <input type="text" name="q8" /></td>
+        <td></td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>Leather sofa</td>
+        <td>DFD 44</td>
+        <td>9. <input type="text" name="q9" /></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>10. <input type="text" name="q10" /></td>
+        <td>TX 22</td>
+        <td>silver</td>
+        <td>1</td>
+      </tr>
+    </table>
+
+    <button class="submit-btn" onclick="submitAnswers()">Submit Section</button>
+  </div>
+
+  <script>
+    // Populate student info from localStorage
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const surname = localStorage.getItem("studentSurname") || "Student";
+    const studentNo = localStorage.getItem("studentNumber") || "N/A";
+
+    document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
+
+    function submitAnswers() {
+      alert("Answers submitted! (You can later connect this to scoring or the next section.)");
+      // Redirect or process answers here...
+    }
+  </script>
+</body>
+</html>

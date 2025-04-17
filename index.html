@@ -3,106 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mock Test 1 – Listening Sign-Up</title>
+  <title>Mock Test 1 – Sign Up</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      background-color: #ffffff;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #66d3f3;
-      color: #0a0a0a;
-    }
-
-    .container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      height: 200vh;
-      padding: 80px;
-      box-sizing: border-box;
-    }
-
-    .left, .right {
+      height: 100vh;
+      overflow: hidden;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
 
-    .left img {
-      max-width: 300px;
-      margin-bottom: 20px;
-    }
-
-    .left h2 {
-      font-size: 22px;
-      margin: 10px 0 5px;
-    }
-
-    .left h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .right h1 {
-      font-size: 36px;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-
-    .underline-bar {
-      width: 120px;
-      height: 8px;
-      background: linear-gradient(to right, red 33%, #1e74a3 33%);
-      margin-bottom: 20px;
-    }
-
-    .right p {
-      font-size: 16px;
-      margin-bottom: 30px;
+    .wrapper {
       text-align: center;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    input, .btn {
-      width: 320px;
-      padding: 12px 20px;
-      margin-bottom: 20px;
-      border-radius: 50px;
-      font-size: 16px;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
       box-sizing: border-box;
     }
 
+    .logo {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 40px;
+    }
+
     input {
-      border: none;
-      background-color: #1e74a3;
-      color: white;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      width: 100%;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: 0.3s ease;
     }
 
     input:focus {
-      background-color: white;
-      color: black;
+      border-color: #007BFF;
       outline: none;
-    }
-
-    input::placeholder {
-      color: #e0e0e0;
+      background-color: #f9f9f9;
     }
 
     .btn {
-      background-color: transparent;
+      width: 100%;
+      padding: 12px;
       border: 2px solid #000;
+      border-radius: 25px;
+      background-color: transparent;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
+      transition: 0.3s ease;
     }
 
     .btn:hover {
@@ -110,41 +65,29 @@
       color: #fff;
     }
 
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-        padding: 20px;
-      }
-
-      .left {
-        margin-bottom: 40px;
+    @media (max-height: 500px) {
+      body {
+        overflow-y: auto;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="left">
-      <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/WSE_MASTER%20LOGO_COLOUR_POSITIVE.png" alt="Wall Street English Logo" />
-      <h2>Mock Test 1</h2>
-      <h1>Listening Test</h1>
-    </div>
-    <div class="right">
-      <h1>Sign Up</h1>
-      <div class="underline-bar"></div>
-      <p>Welcome back! Fill in the information to access the test</p>
-      <form id="signupForm">
-        <input type="text" id="name" placeholder="Name" required />
-        <input type="text" id="surname" placeholder="Surname" required />
-        <input type="text" id="studentNo" placeholder="Student No" required />
-        <button type="submit" class="btn">Start Test</button>
-      </form>
-    </div>
+  <div class="wrapper">
+    <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wall-street-logo-horiz.png" alt="Wall Street English Logo" class="logo" />
+    
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="text" id="surname" placeholder="Surname" required />
+      <input type="text" id="studentNo" placeholder="Student No." required />
+      <button type="submit" class="btn">Start Test</button>
+    </form>
   </div>
 
   <script>
     document.getElementById("signupForm").addEventListener("submit", function (e) {
       e.preventDefault();
+
       const name = document.getElementById("name").value.trim();
       const surname = document.getElementById("surname").value.trim();
       const studentNo = document.getElementById("studentNo").value.trim();

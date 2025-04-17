@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Test 1 – Listening Sign-Up</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #66d3f3;
+      color: #0a0a0a;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px;
+      min-height: 100vh;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+    }
+
+    .left {
+      flex: 1;
+      text-align: center;
+    }
+
+    .left img {
+      max-width: 280px;
+      margin-bottom: 20px;
+    }
+
+    .left h2 {
+      font-size: 24px;
+      margin-top: 10px;
+      color: #000;
+    }
+
+    .left h1 {
+      font-size: 32px;
+      margin: 0;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .right {
+      flex: 1;
+      max-width: 500px;
+      background-color: transparent;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .right h1 {
+      font-size: 36px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .underline-bar {
+      width: 120px;
+      height: 8px;
+      background: linear-gradient(to right, red 33%, #1e74a3 33%);
+      margin-bottom: 20px;
+    }
+
+    .right p {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 50px;
+      background-color: #1e74a3;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    input::placeholder {
+      color: #e0e0e0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 50px;
+      background-color: transparent;
+      border: 2px solid #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .right {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/WSE_MASTER%20LOGO_COLOUR_POSITIVE.png" alt="Wall Street English Logo" />
+      <h2>Mock Test 1</h2>
+      <h1>Listening Test</h1>
+    </div>
+    <div class="right">
+      <h1>Sign Up</h1>
+      <div class="underline-bar"></div>
+      <p>Welcome back! Fill in the information to access the test</p>
+      <form id="signupForm">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="text" id="surname" placeholder="Surname" required />
+        <input type="text" id="studentNo" placeholder="Student No" required />
+        <button type="submit" class="btn">Start Test</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Handle form submission
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const surname = document.getElementById("surname").value.trim();
+      const studentNo = document.getElementById("studentNo").value.trim();
+
+      if (name && surname && studentNo) {
+        localStorage.setItem("studentName", name);
+        localStorage.setItem("studentSurname", surname);
+        localStorage.setItem("studentNumber", studentNo);
+        window.location.href = "listening-part1.html"; // Go to Part 1
+      } else {
+        alert("Please fill in all fields.");
+      }
+    });
+  </script>
+</body>
+</html>

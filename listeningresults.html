@@ -45,7 +45,7 @@
     const correctAnswers = {
       q1: ["Dress your Best"],
       q2: ["Kirby"],
-      q3: ["09356 788 545"],
+      q3: ["09356788545", "09356 788 545", "09356-788-545"],
       q4: ["(extra) charge", "extra charge", "charge"],
       q5: ["American Express"],
       q6: ["black", "dark"],
@@ -83,6 +83,22 @@
       q40: ["plastic"]
     };
 
+    function normalizePhone(str) {
+      return str.replace(/\D/g, ''); // remove all non-digit characters
+    }
+
+    function isAnswerCorrect(userAnswer, acceptedAnswers, allowCapitalizationFlex = false, normalizePhoneOnly = false) {
+      const trimmedAnswer = userAnswer.trim();
+      return acceptedAnswers.some(correct => {
+        if (normalizePhoneOnly) {
+          return normalizePhone(correct) === normalizePhone(trimmedAnswer);
+        }
+        return allowCapitalizationFlex
+          ? correct.trim().toLowerCase() === trimmedAnswer.toLowerCase()
+          : correct.trim() === trimmedAnswer;
+      });
+    }
+
     const allAnswers = {
       ...JSON.parse(localStorage.getItem("listeningPart1Answers") || '{}'),
       ...JSON.parse(localStorage.getItem("listeningPart2Answers") || '{}'),
@@ -97,15 +113,6 @@
       'Part 4': [31, 40]
     };
 
-    function isAnswerCorrect(userAnswer, acceptedAnswers, allowCapitalizationFlex = false) {
-      const trimmedAnswer = userAnswer.trim();
-      return acceptedAnswers.some(correct => {
-        return allowCapitalizationFlex
-          ? correct.trim().toLowerCase() === trimmedAnswer.toLowerCase()
-          : correct.trim() === trimmedAnswer;
-      });
-    }
-
     let totalCorrect = 0;
     const partCorrect = { 'Part 1': 0, 'Part 2': 0, 'Part 3': 0, 'Part 4': 0 };
 
@@ -119,6 +126,8 @@
       let isCorrect = false;
       if (q === "q1" || q === "q5") {
         isCorrect = isAnswerCorrect(userAnswer, answerSet, true);
+      } else if (q === "q3") {
+        isCorrect = isAnswerCorrect(userAnswer, answerSet, false, true);
       } else {
         isCorrect = isAnswerCorrect(userAnswer, answerSet);
       }

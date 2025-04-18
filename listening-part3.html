@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Listening – Part 3</title>
   <style>
     body { font-family: 'Segoe UI', sans-serif; background-color: #fff; margin: 0; padding: 0; }
@@ -53,9 +53,9 @@
       <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part3.mp3" type="audio/mp3">
     </audio>
 
-    <form id="testForm">
-      <!-- Question content goes here -->
-    </form>
+    <!-- Form was previously restored here -->
+    {{form}}
+
   </div>
 
   <script>
@@ -112,10 +112,8 @@
         q29: ["A", "C"],
         q30: ["A", "C"]
       };
-
       const stored = JSON.parse(localStorage.getItem("listeningPart3Answers") || '{}');
       let score = 0;
-
       ["q27", "q28", "q29", "q30"].forEach(qKey => {
         const user = stored[qKey] || [];
         const correct = correctPairs[qKey];
@@ -126,7 +124,6 @@
         let correctSelected = [...userSet].filter(x => correctSet.has(x)).length;
         score += correctSelected;
       });
-
       localStorage.setItem("listeningPart3PartialScore", score);
     }
 
@@ -199,10 +196,8 @@
 
     window.addEventListener("load", () => {
       restoreAnswers();
-
       const started = localStorage.getItem("listeningPart3Started") === "true";
       const timeLeftStored = parseInt(localStorage.getItem("listeningPart3TimeLeft") || "600");
-
       if (started && timeLeftStored > 0) {
         playBtn.style.display = "none";
         resumeBtn.style.display = "block";
@@ -227,6 +222,14 @@
 
     limitCheckboxes("limit-27-28");
     limitCheckboxes("limit-29-30");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      collectAnswers();
+      calculatePartialCredit();
+      alert("Answers submitted! Listening section complete.");
+      window.location.href = "listening-part4.html";
+    });
   </script>
 </body>
 </html>

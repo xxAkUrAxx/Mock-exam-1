@@ -144,6 +144,9 @@
       table.appendChild(row);
     }
 
+    breakdown["Part 3"] = Math.min(breakdown["Part 3"], 10);
+    total = Math.min(total, 40);
+
     function getBand(score) {
       if (score >= 39) return "9.0";
       if (score >= 37) return "8.5";

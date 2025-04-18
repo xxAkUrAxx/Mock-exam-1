@@ -75,30 +75,38 @@
     function isCorrectAnswer(userAnswer, correctOptions) {
       if (!userAnswer || correctOptions.length === 0) return false;
 
-      const userAnswers = userAnswer.split(/[\s,\/]+/).map(ans => normalize(ans));
-      const correctNormalized = correctOptions.map(ans => normalize(ans));
+      const norm = str => str.replace(/[()]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase().trim();
+      const normPhone = str => str.replace(/\D/g, '');
 
-      // Single answer
-      if (correctOptions.length === 1) {
-        return correctNormalized.includes(userAnswers[0]);
-      }
+      const normalizedUser = norm(userAnswer);
+      const userAnswers = userAnswer.split(/[\s,\/]+/).map(norm);
+      const normalizedCorrect = correctOptions.map(norm);
 
-      // Multi-answer (choose TWO)
-      if (correctOptions.length === 2 && userAnswers.length === 2) {
+      // Multi-letter answers (like "A C", "D/E")
+      const isTwoLetters = correctOptions.length === 2 &&
+        correctOptions.every(opt => /^[a-eA-E]$/.test(opt.trim())) &&
+        /^[a-eA-E](\s*[,\/]?\s*[a-eA-E])?$/.test(userAnswer.trim());
+
+      if (isTwoLetters && userAnswers.length === 2) {
         const userSet = new Set(userAnswers);
-        const correctSet = new Set(correctNormalized);
-        if (userSet.size !== correctSet.size) return false;
-        for (let val of userSet) {
-          if (!correctSet.has(val)) return false;
-        }
-        return true;
+        const correctSet = new Set(normalizedCorrect);
+        return userSet.size === correctSet.size && [...userSet].every(val => correctSet.has(val));
       }
 
-      // Phone or free-text answer fallback
+      // Match exact single correct answer
+      if (normalizedCorrect.includes(normalizedUser)) return true;
+
+      // Check phone number match
       for (let option of correctOptions) {
-        if (normalizePhone(option) === normalizePhone(userAnswer)) return true;
-        if (normalize(option) === normalize(userAnswer)) return true;
+        if (normPhone(option) === normPhone(userAnswer)) return true;
       }
+
+      // Loose match (for plurals/variations)
+      for (let option of correctOptions) {
+        const normalizedOption = norm(option);
+        if (normalizedUser.includes(normalizedOption) || normalizedOption.includes(normalizedUser)) return true;
+      }
+
       return false;
     }
 

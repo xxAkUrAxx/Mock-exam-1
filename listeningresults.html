@@ -130,7 +130,7 @@
         const userSet = new Set(userGroupAnswers.map(a => a.toUpperCase()));
         const correctSetUpper = new Set(group.correct.map(a => a.toUpperCase()));
         const matchCount = [...userSet].filter(v => correctSetUpper.has(v)).length;
-        let groupDisplay = userGroupAnswers.join(" / ");
+        let groupDisplay = [...new Set(userGroupAnswers)].join(" / ");
 
         group.questions.forEach(q => usedQuestions.add(q));
         let rowSpan = group.questions.length;

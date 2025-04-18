@@ -139,11 +139,9 @@
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${q}</td>
-            <td>${userGroupAnswers.join(" / ")}</td>
-            <td>${index === 0 ? group.correct.join(" / ") : ""}</td>
-            <td class="${index === 0 ? (matchCount === 2 ? 'correct' : matchCount === 1 ? 'partial' : 'incorrect') : ''}">
-              ${index === 0 ? (matchCount === 2 ? '✅' : matchCount === 1 ? '☑️' : '❌') : ''}
-            </td>`;
+            <td>${[...new Set(userGroupAnswers)].join(" / ")}</td>
+            <td>${group.correct.join(" / ")}</td>
+            <td class="${matchCount === 2 ? 'correct' : matchCount === 1 ? 'partial' : 'incorrect'}">${matchCount === 2 ? '✅' : matchCount === 1 ? '☑️' : '❌'}</td>`;
           table.appendChild(row);
         });
 

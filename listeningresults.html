@@ -84,18 +84,24 @@
     };
 
     function normalizePhone(str) {
-      return str.replace(/\D/g, ''); // remove all non-digit characters
+      return str.replace(/\D/g, '');
+    }
+
+    function stripBrackets(text) {
+      return text.replace(/[()]/g, '').trim();
     }
 
     function isAnswerCorrect(userAnswer, acceptedAnswers, allowCapitalizationFlex = false, normalizePhoneOnly = false) {
       const trimmedAnswer = userAnswer.trim();
       return acceptedAnswers.some(correct => {
+        const cleanCorrect = stripBrackets(correct);
+        const cleanUser = stripBrackets(trimmedAnswer);
         if (normalizePhoneOnly) {
-          return normalizePhone(correct) === normalizePhone(trimmedAnswer);
+          return normalizePhone(cleanCorrect) === normalizePhone(cleanUser);
         }
         return allowCapitalizationFlex
-          ? correct.trim().toLowerCase() === trimmedAnswer.toLowerCase()
-          : correct.trim() === trimmedAnswer;
+          ? cleanCorrect.toLowerCase() === cleanUser.toLowerCase()
+          : cleanCorrect === cleanUser;
       });
     }
 

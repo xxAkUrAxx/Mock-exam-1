@@ -6,23 +6,21 @@
   <title>Listening Test Results</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #fff; margin: 0; padding: 0; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #fff; }
-    .logo { height: 60px; }
-    .student-meta { text-align: right; font-size: 14px; color: #555; }
-    .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 30px; page-break-inside: avoid; }
-    h1, h2 { text-align: center; margin-bottom: 12px; font-size: 24px; }
-    .score-summary { font-size: 18px; margin-top: 20px; text-align: center; }
-    .breakdown, .answers { margin-top: 30px; font-size: 16px; }
-    .answers table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .answers th, .answers td { padding: 8px 10px; text-align: left; vertical-align: top; }
+    body { font-family: 'Segoe UI', sans-serif; background: #fff; margin: 0; padding: 0; font-size: 12px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin: 0 20px; }
+    .logo { height: 50px; }
+    .student-meta { text-align: right; font-size: 12px; color: #555; }
+    .container { width: 100%; margin: 10px; padding: 0; }
+    h1, h2 { text-align: center; margin: 10px 0; font-size: 18px; }
+    .score-summary { text-align: center; margin: 10px 0; }
+    .breakdown { margin: 10px 0; text-align: center; }
+    .answers { margin: 10px 0; text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin: auto; }
+    th, td { padding: 4px; text-align: left; vertical-align: top; }
     .correct { color: green; font-weight: bold; }
     .incorrect { color: red; font-weight: bold; }
-    .download-btn { margin: 30px auto; display: block; padding: 12px 24px; font-size: 16px; border-radius: 8px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
-    .two-column { columns: 2; -webkit-columns: 2; -moz-columns: 2; column-gap: 40px; }
-    @media print {
-      .download-btn { display: none; }
-    }
+    .download-btn { display: block; margin: 20px auto; padding: 8px 16px; font-size: 12px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    @media print { .download-btn { display: none; } }
   </style>
 </head>
 <body>
@@ -37,14 +35,12 @@
     <div class="breakdown" id="partBreakdown"></div>
     <div class="answers">
       <h2>Answer Sheet</h2>
-      <div class="two-column">
-        <table id="answerTable">
-          <thead>
-            <tr><th>Q</th><th>Your Answer</th><th>Correct</th><th>Status</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+      <table id="answerTable">
+        <thead>
+          <tr><th>Q</th><th>Your Answer</th><th>Correct</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
     <button class="download-btn" onclick="downloadPDF()">Download PDF Report</button>
   </div>
@@ -56,47 +52,29 @@
     document.getElementById("studentMeta").textContent = `${name} ${surname} | Student No: ${studentNo}`;
 
     const correctAnswers = {
-      q1: ["dress your best"],
-      q2: ["Kirby"],
-      q3: ["09356788545", "09356 788 545", "09356-788-545"],
-      q4: ["extra charge", "charge"],
-      q5: ["american express", "American Express"],
-      q6: ["black", "dark"],
-      q7: ["glass desk", "glass desks"],
-      q8: ["tg 586", "tg586"],
-      q9: ["yellow"],
-      q10: ["coffee table"],
-      q11: ["plan"],
-      q12: ["on foot"],
-      q13: ["sensible clothes"],
-      q14: ["weather forecast", "forecast"],
-      q15: ["volunteers"],
-      q16: ["accidents"],
-      q17: ["finish line"],
+      q1: ["dress your best"], q2: ["Kirby"], q3: ["09356788545", "09356 788 545", "09356-788-545"],
+      q4: ["extra charge", "charge"], q5: ["american express", "American Express"], q6: ["black", "dark"],
+      q7: ["glass desk", "glass desks"], q8: ["tg 586", "tg586"], q9: ["yellow"], q10: ["coffee table"],
+      q11: ["plan"], q12: ["on foot"], q13: ["sensible clothes"], q14: ["weather forecast", "forecast"],
+      q15: ["volunteers"], q16: ["accidents"], q17: ["finish line"],
       q18: ["c"], q19: ["b"], q20: ["e"], q21: ["c"], q22: ["b"], q23: ["a"], q24: ["c"],
       q25: ["a"], q26: ["b"], q27: ["d", "e"], q28: ["e", "d"], q29: ["a", "c"], q30: ["c", "a"],
-      q31: ["rain shadow"], q32: ["few inches"], q33: ["other minerals", "minerals"],
-      q34: ["collect"], q35: ["green stem", "stem"], q36: ["expand"], q37: ["white hairs"],
-      q38: ["sharp thorns", "thorns"], q39: ["very tough", "tough"], q40: ["plastic"]
+      q31: ["rain shadow"], q32: ["few inches"], q33: ["other minerals", "minerals"], q34: ["collect"],
+      q35: ["green stem", "stem"], q36: ["expand"], q37: ["white hairs"], q38: ["sharp thorns", "thorns"],
+      q39: ["very tough", "tough"], q40: ["plastic"]
     };
 
     function normalize(str) {
       return str.replace(/[()]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase();
     }
-
     function normalizePhone(str) {
       return str.replace(/\D/g, '');
     }
-
     function isCorrectAnswer(userAnswer, correctOptions) {
       const normUser = normalize(userAnswer);
       if (!normUser) return false;
-
       const allLetters = correctOptions.every(opt => /^[a-z]$/i.test(opt.trim()));
-      if (allLetters) {
-        return correctOptions.map(opt => opt.toLowerCase()).includes(normUser.toLowerCase());
-      }
-
+      if (allLetters) return correctOptions.map(opt => opt.toLowerCase()).includes(normUser);
       for (let option of correctOptions) {
         if (normalizePhone(option) === normalizePhone(normUser)) return true;
         if (normalize(option) === normUser) return true;
@@ -121,17 +99,10 @@
       const correctSet = correctAnswers[qKey] || [];
       const isCorrect = isCorrectAnswer(userAns, correctSet);
       if (isCorrect) total++;
-
       const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
       if (isCorrect) breakdown[part]++;
-
       const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${i}</td>
-        <td>${userAns}</td>
-        <td>${correctSet.join(" / ")}</td>
-        <td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>
-      `;
+      row.innerHTML = `<td>${i}</td><td>${userAns}</td><td>${correctSet.join(" / ")}</td><td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>`;
       table.appendChild(row);
     }
 
@@ -153,23 +124,20 @@
     }
 
     document.getElementById("summaryText").innerHTML = `🎯 You got <strong>${total} out of 40</strong> correct.<br>🥇 Estimated IELTS Academic Band Score: <strong>${getBand(total)}</strong>`;
-
     document.getElementById("partBreakdown").innerHTML = `
       <h2>📊 Part-by-Part Breakdown</h2>
-      <ul style="list-style: none; padding-left: 0; font-size: 16px;">
-        <li>Part 1: ${breakdown["Part 1"]} / 10</li>
-        <li>Part 2: ${breakdown["Part 2"]} / 10</li>
-        <li>Part 3: ${breakdown["Part 3"]} / 10</li>
-        <li>Part 4: ${breakdown["Part 4"]} / 10</li>
-      </ul>`;
+      <div>Part 1: ${breakdown["Part 1"]} / 10</div>
+      <div>Part 2: ${breakdown["Part 2"]} / 10</div>
+      <div>Part 3: ${breakdown["Part 3"]} / 10</div>
+      <div>Part 4: ${breakdown["Part 4"]} / 10</div>`;
 
     function downloadPDF() {
       const element = document.body;
       const opt = {
-        margin: 0.1,
+        margin: 0.25,
         filename: 'Listening_Results.pdf',
-        image: { type: 'jpeg', quality: 1. },
-        html2canvas: { scale: 1, useCORS: true },
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };

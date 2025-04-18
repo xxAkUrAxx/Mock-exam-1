@@ -72,6 +72,24 @@
       color: #fff;
     }
 
+    .reset-btn {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      font-size: 15px;
+      font-weight: bold;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      background-color: #c0392b;
+    }
+
     @media (max-height: 500px) {
       body {
         overflow-y: auto;
@@ -91,6 +109,9 @@
       <input type="text" id="studentNo" placeholder="Student No." required />
       <button type="submit" class="btn">Start Test</button>
     </form>
+
+    <!-- 🔁 Reset Button -->
+    <button class="reset-btn" onclick="resetAll()">🔁 Reset All Data</button>
   </div>
 
   <script>
@@ -110,6 +131,23 @@
         alert("Please fill in all fields.");
       }
     });
+
+    // 🔁 Reset All Function
+    function resetAll() {
+      if (confirm("Clear all saved data, including student info and test progress?")) {
+        localStorage.removeItem("studentName");
+        localStorage.removeItem("studentSurname");
+        localStorage.removeItem("studentNumber");
+
+        localStorage.removeItem("listeningPart1Answers");
+        localStorage.removeItem("listeningPart1AudioTime");
+        localStorage.removeItem("listeningPart1Started");
+        localStorage.removeItem("listeningPart1TimeLeft");
+
+        alert("All data has been cleared.");
+        location.reload();
+      }
+    }
   </script>
 </body>
 </html>

@@ -54,7 +54,6 @@
     </audio>
 
     <form id="testForm">
-
       <div class="question-block">
         <h3>Questions 21–26</h3>
         <p>Choose the correct letter, <strong>A, B, or C</strong>.</p>
@@ -170,7 +169,19 @@
           answers[input.name] = input.value.trim();
         }
       });
-      localStorage.setItem("listeningPart3Answers", JSON.stringify(answers));
+      const flatAnswers = {
+        q21: answers.q21 || "",
+        q22: answers.q22 || "",
+        q23: answers.q23 || "",
+        q24: answers.q24 || "",
+        q25: answers.q25 || "",
+        q26: answers.q26 || "",
+        q27: answers.q27_28 || [],
+        q28: answers.q27_28 || [],
+        q29: answers.q29_30 || [],
+        q30: answers.q29_30 || []
+      };
+      localStorage.setItem("listeningPart3Answers", JSON.stringify(flatAnswers));
     }
 
     function restoreAnswers() {
@@ -178,11 +189,11 @@
       Object.entries(saved).forEach(([key, val]) => {
         if (Array.isArray(val)) {
           val.forEach(v => {
-            const el = form.querySelector(`input[name="${key}"][value="${v}"]`);
+            const el = form.querySelector(`input[name$="${key.includes('27') || key.includes('28') ? 'q27_28' : 'q29_30'}"][value="${v}"]`);
             if (el) el.checked = true;
           });
         } else {
-          const el = form.querySelector(`[name="${key}"][value="${val}"]`);
+          const el = form.querySelector(`input[name="${key}"][value="${val}"]`);
           if (el) el.checked = true;
         }
       });
@@ -255,20 +266,6 @@
       }
     });
 
-    // Limit checkboxes to 2 per group
-    function limitCheckboxes(groupClass) {
-      const boxes = document.querySelectorAll(`.${groupClass}`);
-      boxes.forEach(box => {
-        box.addEventListener("change", () => {
-          const checked = Array.from(boxes).filter(b => b.checked);
-          if (checked.length > 2) {
-            box.checked = false;
-            alert("You can only select two options.");
-          }
-        });
-      });
-    }
-
     limitCheckboxes("limit-27-28");
     limitCheckboxes("limit-29-30");
 
@@ -276,7 +273,6 @@
       e.preventDefault();
       collectAnswers();
       alert("Answers submitted! Listening section complete.");
-      // You can redirect here if needed:
       window.location.href = "listening-part4.html";
     });
   </script>

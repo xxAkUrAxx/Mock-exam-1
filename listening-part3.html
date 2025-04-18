@@ -30,6 +30,7 @@
     }
     .submit-btn:hover, .play-button:hover { background-color: #000; color: #fff; }
     audio { display: none !important; pointer-events: none; }
+    hr { margin: 25px 0; border: none; border-top: 1px solid #ccc; }
   </style>
 </head>
 <body>
@@ -43,70 +44,94 @@
 
   <div class="container">
     <h2>Listening – Part 3</h2>
-    <p class="instructions">Click play and answer the questions as you listen. Choose the correct letter for questions 21–26, and two letters for questions 27–30.</p>
+    <p class="instructions">Click play and answer the questions as you listen. Choose the correct letter for questions 21–26, and TWO letters for questions 27–30.</p>
 
     <button id="playBtn" class="play-button">▶ Play Audio</button>
     <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
 
-    <audio id="audioPlayer" preload="none" tabindex="-1" controlsList="nodownload noplaybackrate nofullscreen">
+    <audio id="audioPlayer" preload="none">
       <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part3.mp3" type="audio/mp3">
     </audio>
 
     <form id="testForm">
-      <!-- Questions 21–26 -->
+
       <div class="question-block">
         <h3>Questions 21–26</h3>
         <p>Choose the correct letter, <strong>A, B, or C</strong>.</p>
 
-        <!-- Repeatable pattern -->
-        <label>21. What does Ahmed say about last week’s seminar?</label>
-        <label><input type="radio" name="q21" value="A" /> A. He wasn’t able to get there on time.</label>
-        <label><input type="radio" name="q21" value="B" /> B. He didn’t know all the students.</label>
-        <label><input type="radio" name="q21" value="C" /> C. He couldn’t understand everything.</label>
+        <div>
+          <strong>21.</strong> What does Ahmed say about last week’s seminar?<br>
+          <label><input type="radio" name="q21" value="A" /> A. He wasn’t able to get there on time.</label>
+          <label><input type="radio" name="q21" value="B" /> B. He didn’t know all the students.</label>
+          <label><input type="radio" name="q21" value="C" /> C. He couldn’t understand everything.</label>
+        </div>
 
-        <label>22. What does the tutor say about Ahmed’s preparation?</label>
-        <label><input type="radio" name="q22" value="A" /> A. He was better prepared than some students.</label>
-        <label><input type="radio" name="q22" value="B" /> B. He completed some useful work.</label>
-        <label><input type="radio" name="q22" value="C" /> C. He read some useful articles.</label>
+        <hr>
 
-        <label>23. What does Ahmed say about his participation?</label>
-        <label><input type="radio" name="q23" value="A" /> A. He spoke only to his neighbour.</label>
-        <label><input type="radio" name="q23" value="B" /> B. He spoke when others were talking.</label>
-        <label><input type="radio" name="q23" value="C" /> C. He felt embarrassed when others looked at him.</label>
+        <div>
+          <strong>22.</strong> What does the tutor say about Ahmed’s preparation?<br>
+          <label><input type="radio" name="q22" value="A" /> A. He was better prepared than some students.</label>
+          <label><input type="radio" name="q22" value="B" /> B. He completed some useful work.</label>
+          <label><input type="radio" name="q22" value="C" /> C. He read some useful articles.</label>
+        </div>
 
-        <label>24. What does Ahmed worry about most?</label>
-        <label><input type="radio" name="q24" value="A" /> A. Speaking at the right time</label>
-        <label><input type="radio" name="q24" value="B" /> B. Taking enough notes</label>
-        <label><input type="radio" name="q24" value="C" /> C. Staying focused</label>
+        <hr>
 
-        <label>25. What does Ahmed say about his role?</label>
-        <label><input type="radio" name="q25" value="A" /> A. He hasn’t thought about it.</label>
-        <label><input type="radio" name="q25" value="B" /> B. He’d like to change it.</label>
-        <label><input type="radio" name="q25" value="C" /> C. He feels he is acting a part.</label>
+        <div>
+          <strong>23.</strong> What does Ahmed say about his participation?<br>
+          <label><input type="radio" name="q23" value="A" /> A. He spoke only to his neighbour.</label>
+          <label><input type="radio" name="q23" value="B" /> B. He spoke when others were talking.</label>
+          <label><input type="radio" name="q23" value="C" /> C. He felt embarrassed when others looked at him.</label>
+        </div>
 
-        <label>26. What does the tutor suggest for the next seminar?</label>
-        <label><input type="radio" name="q26" value="A" /> A. Help others more</label>
-        <label><input type="radio" name="q26" value="B" /> B. Observe others</label>
-        <label><input type="radio" name="q26" value="C" /> C. Ask others for their views</label>
+        <hr>
+
+        <div>
+          <strong>24.</strong> What does Ahmed worry about most?<br>
+          <label><input type="radio" name="q24" value="A" /> A. Speaking at the right time</label>
+          <label><input type="radio" name="q24" value="B" /> B. Taking enough notes</label>
+          <label><input type="radio" name="q24" value="C" /> C. Staying focused</label>
+        </div>
+
+        <hr>
+
+        <div>
+          <strong>25.</strong> What does Ahmed say about his role?<br>
+          <label><input type="radio" name="q25" value="A" /> A. He hasn’t thought about it.</label>
+          <label><input type="radio" name="q25" value="B" /> B. He’d like to change it.</label>
+          <label><input type="radio" name="q25" value="C" /> C. He feels he is acting a part.</label>
+        </div>
+
+        <hr>
+
+        <div>
+          <strong>26.</strong> What does the tutor suggest for the next seminar?<br>
+          <label><input type="radio" name="q26" value="A" /> A. Help others more</label>
+          <label><input type="radio" name="q26" value="B" /> B. Observe others</label>
+          <label><input type="radio" name="q26" value="C" /> C. Ask others for their views</label>
+        </div>
       </div>
 
-      <!-- Questions 27–30 (Checkbox) -->
+      <hr>
+
       <div class="question-block">
         <h3>Questions 27–28</h3>
         <p>Choose <strong>TWO letters</strong>, A–E. What TWO strategies does the tutor suggest?</p>
-        <label><input type="checkbox" name="q27_28" value="A" /> A. Speak more frequently</label>
-        <label><input type="checkbox" name="q27_28" value="B" /> B. Behave in a confident manner</label>
-        <label><input type="checkbox" name="q27_28" value="C" /> C. Sit next to someone helpful</label>
-        <label><input type="checkbox" name="q27_28" value="D" /> D. Listen to what others say</label>
-        <label><input type="checkbox" name="q27_28" value="E" /> E. Think of questions to ask</label>
+        <label><input type="checkbox" name="q27_28" value="A" class="limit-27-28" /> A. Speak more frequently</label>
+        <label><input type="checkbox" name="q27_28" value="B" class="limit-27-28" /> B. Behave in a confident manner</label>
+        <label><input type="checkbox" name="q27_28" value="C" class="limit-27-28" /> C. Sit next to someone helpful</label>
+        <label><input type="checkbox" name="q27_28" value="D" class="limit-27-28" /> D. Listen to what others say</label>
+        <label><input type="checkbox" name="q27_28" value="E" class="limit-27-28" /> E. Think of questions to ask</label>
+      </div>
 
-        <h3 style="margin-top: 30px;">Questions 29–30</h3>
+      <div class="question-block">
+        <h3>Questions 29–30</h3>
         <p>Choose <strong>TWO letters</strong>, A–E. What does the tutor say about taking notes?</p>
-        <label><input type="checkbox" name="q29_30" value="A" /> A. Plan them before the seminar</label>
-        <label><input type="checkbox" name="q29_30" value="B" /> B. Note down key words</label>
-        <label><input type="checkbox" name="q29_30" value="C" /> C. Note points to say later</label>
-        <label><input type="checkbox" name="q29_30" value="D" /> D. Include self-analysis</label>
-        <label><input type="checkbox" name="q29_30" value="E" /> E. Rewrite them after the seminar</label>
+        <label><input type="checkbox" name="q29_30" value="A" class="limit-29-30" /> A. Plan them before the seminar</label>
+        <label><input type="checkbox" name="q29_30" value="B" class="limit-29-30" /> B. Note down key words</label>
+        <label><input type="checkbox" name="q29_30" value="C" class="limit-29-30" /> C. Note points to say later</label>
+        <label><input type="checkbox" name="q29_30" value="D" class="limit-29-30" /> D. Include self-analysis</label>
+        <label><input type="checkbox" name="q29_30" value="E" class="limit-29-30" /> E. Rewrite them after the seminar</label>
       </div>
 
       <button class="submit-btn" type="submit">Submit Section</button>
@@ -125,7 +150,7 @@
     const audio = document.getElementById("audioPlayer");
     const form = document.getElementById("testForm");
 
-    let timeLeft = 600; // 10 minutes
+    let timeLeft = 600;
     let timerInterval;
 
     function updateTimerDisplay() {
@@ -217,6 +242,7 @@
 
     window.addEventListener("load", () => {
       restoreAnswers();
+
       const started = localStorage.getItem("listeningPart3Started") === "true";
       const timeLeftStored = parseInt(localStorage.getItem("listeningPart3TimeLeft") || "600");
 
@@ -229,12 +255,30 @@
       }
     });
 
+    // Limit checkboxes to 2 per group
+    function limitCheckboxes(groupClass) {
+      const boxes = document.querySelectorAll(`.${groupClass}`);
+      boxes.forEach(box => {
+        box.addEventListener("change", () => {
+          const checked = Array.from(boxes).filter(b => b.checked);
+          if (checked.length > 2) {
+            box.checked = false;
+            alert("You can only select two options.");
+          }
+        });
+      });
+    }
+
+    limitCheckboxes("limit-27-28");
+    limitCheckboxes("limit-29-30");
+
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       collectAnswers();
-      alert("Answers submitted! (Ready for scoring or next section.)");
+      alert("Answers submitted! Listening section complete.");
+      // You can redirect here if needed:
+      // window.location.href = "next-section.html";
     });
   </script>
 </body>
 </html>
-

@@ -103,40 +103,68 @@
     let total = 0;
     const breakdown = { "Part 1": 0, "Part 2": 0, "Part 3": 0, "Part 4": 0 };
 
+    // Grouped logic for Q27-28 and Q29-30
+    const groupedMultiple = {
+      q27_28: { questions: [27, 28], correct: ["D", "E"] },
+      q29_30: { questions: [29, 30], correct: ["A", "C"] }
+    };
+
+    const usedQuestions = new Set();
+
     for (let i = 1; i <= 40; i++) {
       const qKey = `q${i}`;
-      const userAns = answers[qKey] || "";
+      if (usedQuestions.has(i)) continue;
+
+      let userAns = answers[qKey] || "";
       const correctSet = correctAnswers[qKey] || [];
       let isCorrect = false;
       let statusClass = "incorrect";
       let symbol = "❌";
       let displayUser = Array.isArray(userAns) ? userAns.join(" / ") : userAns;
 
-      if ([27, 28, 29, 30].includes(i)) {
-        const correctPair = correctSet.map(a => a.toUpperCase());
-        const userValues = Array.isArray(userAns) ? userAns.map(a => a.toUpperCase()) : [];
-        const matchCount = userValues.filter(a => correctPair.includes(a)).length;
+      // Handle grouped multiple-answer logic
+      if (i === 27 || i === 29) {
+        const groupKey = i === 27 ? "q27_28" : "q29_30";
+        const group = groupedMultiple[groupKey];
+        const userGroupAnswers = group.questions.flatMap(q => answers[`q${q}`] || []);
+        const userSet = new Set(userGroupAnswers.map(a => a.toUpperCase()));
+        const correctSetUpper = new Set(group.correct.map(a => a.toUpperCase()));
+        const matchCount = [...userSet].filter(v => correctSetUpper.has(v)).length;
+        let groupDisplay = userGroupAnswers.join(" / ");
+
+        group.questions.forEach(q => usedQuestions.add(q));
+        let rowSpan = group.questions.length;
+
+        group.questions.forEach((q, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${q}</td>
+            <td>${index === 0 ? groupDisplay : ""}</td>
+            <td>${index === 0 ? group.correct.join(" / ") : ""}</td>
+            <td class="${index === 0 ? (matchCount === 2 ? 'correct' : matchCount === 1 ? 'partial' : 'incorrect') : ''}">
+              ${index === 0 ? (matchCount === 2 ? '✅' : matchCount === 1 ? '☑️' : '❌') : ''}
+            </td>`;
+          table.appendChild(row);
+        });
+
         if (matchCount === 2) {
-          isCorrect = true;
-          statusClass = "correct";
-          symbol = "✅";
           total += 2;
           breakdown["Part 3"] += 2;
         } else if (matchCount === 1) {
-          statusClass = "partial";
-          symbol = "☑️";
           total += 1;
           breakdown["Part 3"] += 1;
         }
-      } else {
-        isCorrect = isCorrectAnswer(userAns, correctSet);
-        if (isCorrect) {
-          total++;
-          const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
-          breakdown[part]++;
-          statusClass = "correct";
-          symbol = "✅";
-        }
+
+        continue;
+      }
+
+      isCorrect = isCorrectAnswer(userAns, correctSet);
+      if (isCorrect) {
+        total++;
+        const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
+        breakdown[part]++;
+        statusClass = "correct";
+        symbol = "✅";
       }
 
       const row = document.createElement("tr");

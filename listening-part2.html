@@ -13,10 +13,30 @@
     .container { max-width: 900px; margin: 0 auto; padding: 20px; }
     h2 { text-align: center; margin-top: 0; }
     .instructions { margin: 20px 0; font-style: italic; font-size: 15px; }
-    input[type="text"], select { width: 100%; max-width: 300px; padding: 6px 10px; font-size: 15px; border: 1px solid #aaa; border-radius: 5px; margin-bottom: 15px; }
-    .submit-btn, .play-button { display: block; margin: 30px auto; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 25px; border: 2px solid #000; background-color: #007BFF; color: #fff; cursor: pointer; transition: 0.3s ease; }
+    input[type="text"], select {
+      width: 100%;
+      max-width: 300px;
+      padding: 6px 10px;
+      font-size: 15px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .submit-btn, .play-button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background-color: #007BFF;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
     .submit-btn:hover, .play-button:hover { background-color: #000; color: #fff; }
-    audio { display: none; }
+    audio { display: none !important; pointer-events: none; }
     label { display: block; margin-top: 10px; }
   </style>
 </head>
@@ -33,8 +53,10 @@
     <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
 
     <button id="playBtn" class="play-button">▶ Play Audio</button>
-    <audio id="audioPlayer">
-      <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test%201%20-%20Part%202.mp3" type="audio/mp3">
+    <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
+
+    <audio id="audioPlayer" preload="none" tabindex="-1" controlsList="nodownload noplaybackrate nofullscreen">
+      <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part2.mp3" type="audio/mp3">
     </audio>
 
     <form id="testForm">
@@ -104,10 +126,11 @@
 
     const timerEl = document.getElementById("timer");
     const playBtn = document.getElementById("playBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
     const audio = document.getElementById("audioPlayer");
     const form = document.getElementById("testForm");
 
-    let timeLeft = 540; // 9 minutes
+    let timeLeft = 540;
     let timerInterval;
 
     function updateTimerDisplay() {
@@ -125,16 +148,26 @@
       localStorage.setItem("listeningPart2Answers", JSON.stringify(answers));
     }
 
+    function restoreAnswers() {
+      const saved = JSON.parse(localStorage.getItem("listeningPart2Answers") || "{}");
+      Object.entries(saved).forEach(([key, val]) => {
+        const el = form.querySelector(`[name="${key}"]`);
+        if (el) el.value = val;
+      });
+    }
+
     function disableForm() {
       const inputs = form.querySelectorAll("input, select");
       inputs.forEach(input => input.disabled = true);
     }
 
-    function startTimer() {
+    function startTimer(remaining = 540) {
+      timeLeft = remaining;
       updateTimerDisplay();
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
+        localStorage.setItem("listeningPart2TimeLeft", timeLeft);
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           collectAnswers();
@@ -145,9 +178,48 @@
     }
 
     playBtn.addEventListener("click", () => {
+      audio.currentTime = 0;
       audio.play();
       playBtn.style.display = "none";
+      resumeBtn.style.display = "none";
+      localStorage.setItem("listeningPart2Started", "true");
       startTimer();
+    });
+
+    resumeBtn.addEventListener("click", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart2AudioTime") || "0");
+      const resumeTime = Math.max(0, lastTime - 3);
+      audio.currentTime = resumeTime;
+      audio.play();
+      resumeBtn.style.display = "none";
+      let storedTimeLeft = parseInt(localStorage.getItem("listeningPart2TimeLeft") || "540");
+      let adjustedTime = storedTimeLeft - 3;
+      startTimer(Math.max(0, adjustedTime));
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      localStorage.setItem("listeningPart2AudioTime", audio.currentTime);
+    });
+
+    audio.addEventListener("seeking", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart2AudioTime") || "0");
+      if (audio.currentTime < lastTime - 3) {
+        audio.currentTime = lastTime - 3;
+      }
+    });
+
+    window.addEventListener("load", () => {
+      restoreAnswers();
+      const started = localStorage.getItem("listeningPart2Started") === "true";
+      const timeLeftStored = parseInt(localStorage.getItem("listeningPart2TimeLeft") || "540");
+
+      if (started && timeLeftStored > 0) {
+        playBtn.style.display = "none";
+        resumeBtn.style.display = "block";
+      } else {
+        playBtn.style.display = "block";
+        resumeBtn.style.display = "none";
+      }
     });
 
     form.addEventListener("submit", function(e) {
@@ -158,3 +230,4 @@
   </script>
 </body>
 </html>
+

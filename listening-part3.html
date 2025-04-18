@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listening – Part 3</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #fff; margin: 0; padding: 0; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 40px 10px; border-bottom: 1px solid #ddd; }
+    .logo { height: 60px; }
+    .student-info { text-align: right; font-size: 16px; font-weight: 500; color: #333; }
+    .timer { font-size: 14px; margin-top: 5px; color: #d00; font-weight: bold; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h2 { text-align: center; margin-top: 0; }
+    .instructions { margin: 20px 0; font-style: italic; font-size: 15px; }
+    .question-block { margin-bottom: 25px; }
+    .question-block label { display: block; margin-top: 8px; }
+    .submit-btn, .play-button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background-color: #007BFF;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .submit-btn:hover, .play-button:hover { background-color: #000; color: #fff; }
+    audio { display: none !important; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Logo" class="logo" />
+    <div class="student-info">
+      <div id="studentInfo">Loading...</div>
+      <div class="timer" id="timer">Time Left: 10:00</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Listening – Part 3</h2>
+    <p class="instructions">Click play and answer the questions as you listen. Choose the correct letter for questions 21–26, and two letters for questions 27–30.</p>
+
+    <button id="playBtn" class="play-button">▶ Play Audio</button>
+    <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
+
+    <audio id="audioPlayer" preload="none" tabindex="-1" controlsList="nodownload noplaybackrate nofullscreen">
+      <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part3.mp3" type="audio/mp3">
+    </audio>
+
+    <form id="testForm">
+      <!-- Questions 21–26 -->
+      <div class="question-block">
+        <h3>Questions 21–26</h3>
+        <p>Choose the correct letter, <strong>A, B, or C</strong>.</p>
+
+        <!-- Repeatable pattern -->
+        <label>21. What does Ahmed say about last week’s seminar?</label>
+        <label><input type="radio" name="q21" value="A" /> A. He wasn’t able to get there on time.</label>
+        <label><input type="radio" name="q21" value="B" /> B. He didn’t know all the students.</label>
+        <label><input type="radio" name="q21" value="C" /> C. He couldn’t understand everything.</label>
+
+        <label>22. What does the tutor say about Ahmed’s preparation?</label>
+        <label><input type="radio" name="q22" value="A" /> A. He was better prepared than some students.</label>
+        <label><input type="radio" name="q22" value="B" /> B. He completed some useful work.</label>
+        <label><input type="radio" name="q22" value="C" /> C. He read some useful articles.</label>
+
+        <label>23. What does Ahmed say about his participation?</label>
+        <label><input type="radio" name="q23" value="A" /> A. He spoke only to his neighbour.</label>
+        <label><input type="radio" name="q23" value="B" /> B. He spoke when others were talking.</label>
+        <label><input type="radio" name="q23" value="C" /> C. He felt embarrassed when others looked at him.</label>
+
+        <label>24. What does Ahmed worry about most?</label>
+        <label><input type="radio" name="q24" value="A" /> A. Speaking at the right time</label>
+        <label><input type="radio" name="q24" value="B" /> B. Taking enough notes</label>
+        <label><input type="radio" name="q24" value="C" /> C. Staying focused</label>
+
+        <label>25. What does Ahmed say about his role?</label>
+        <label><input type="radio" name="q25" value="A" /> A. He hasn’t thought about it.</label>
+        <label><input type="radio" name="q25" value="B" /> B. He’d like to change it.</label>
+        <label><input type="radio" name="q25" value="C" /> C. He feels he is acting a part.</label>
+
+        <label>26. What does the tutor suggest for the next seminar?</label>
+        <label><input type="radio" name="q26" value="A" /> A. Help others more</label>
+        <label><input type="radio" name="q26" value="B" /> B. Observe others</label>
+        <label><input type="radio" name="q26" value="C" /> C. Ask others for their views</label>
+      </div>
+
+      <!-- Questions 27–30 (Checkbox) -->
+      <div class="question-block">
+        <h3>Questions 27–28</h3>
+        <p>Choose <strong>TWO letters</strong>, A–E. What TWO strategies does the tutor suggest?</p>
+        <label><input type="checkbox" name="q27_28" value="A" /> A. Speak more frequently</label>
+        <label><input type="checkbox" name="q27_28" value="B" /> B. Behave in a confident manner</label>
+        <label><input type="checkbox" name="q27_28" value="C" /> C. Sit next to someone helpful</label>
+        <label><input type="checkbox" name="q27_28" value="D" /> D. Listen to what others say</label>
+        <label><input type="checkbox" name="q27_28" value="E" /> E. Think of questions to ask</label>
+
+        <h3 style="margin-top: 30px;">Questions 29–30</h3>
+        <p>Choose <strong>TWO letters</strong>, A–E. What does the tutor say about taking notes?</p>
+        <label><input type="checkbox" name="q29_30" value="A" /> A. Plan them before the seminar</label>
+        <label><input type="checkbox" name="q29_30" value="B" /> B. Note down key words</label>
+        <label><input type="checkbox" name="q29_30" value="C" /> C. Note points to say later</label>
+        <label><input type="checkbox" name="q29_30" value="D" /> D. Include self-analysis</label>
+        <label><input type="checkbox" name="q29_30" value="E" /> E. Rewrite them after the seminar</label>
+      </div>
+
+      <button class="submit-btn" type="submit">Submit Section</button>
+    </form>
+  </div>
+
+  <script>
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const surname = localStorage.getItem("studentSurname") || "Student";
+    const studentNo = localStorage.getItem("studentNumber") || "N/A";
+    document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
+
+    const timerEl = document.getElementById("timer");
+    const playBtn = document.getElementById("playBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const audio = document.getElementById("audioPlayer");
+    const form = document.getElementById("testForm");
+
+    let timeLeft = 600; // 10 minutes
+    let timerInterval;
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    function collectAnswers() {
+      const answers = {};
+      const inputs = form.querySelectorAll("input, select");
+      inputs.forEach(input => {
+        if (input.type === "checkbox") {
+          if (!answers[input.name]) answers[input.name] = [];
+          if (input.checked) answers[input.name].push(input.value);
+        } else if (input.checked || input.type === "text" || input.tagName === "SELECT") {
+          answers[input.name] = input.value.trim();
+        }
+      });
+      localStorage.setItem("listeningPart3Answers", JSON.stringify(answers));
+    }
+
+    function restoreAnswers() {
+      const saved = JSON.parse(localStorage.getItem("listeningPart3Answers") || "{}");
+      Object.entries(saved).forEach(([key, val]) => {
+        if (Array.isArray(val)) {
+          val.forEach(v => {
+            const el = form.querySelector(`input[name="${key}"][value="${v}"]`);
+            if (el) el.checked = true;
+          });
+        } else {
+          const el = form.querySelector(`[name="${key}"][value="${val}"]`);
+          if (el) el.checked = true;
+        }
+      });
+    }
+
+    function disableForm() {
+      const inputs = form.querySelectorAll("input, select");
+      inputs.forEach(input => input.disabled = true);
+    }
+
+    function startTimer(remaining = 600) {
+      timeLeft = remaining;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        localStorage.setItem("listeningPart3TimeLeft", timeLeft);
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          collectAnswers();
+          disableForm();
+          alert("Time's up! This section is now closed.");
+        }
+      }, 1000);
+    }
+
+    playBtn.addEventListener("click", () => {
+      audio.currentTime = 0;
+      audio.play();
+      playBtn.style.display = "none";
+      resumeBtn.style.display = "none";
+      localStorage.setItem("listeningPart3Started", "true");
+      startTimer();
+    });
+
+    resumeBtn.addEventListener("click", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart3AudioTime") || "0");
+      const resumeTime = Math.max(0, lastTime - 3);
+      audio.currentTime = resumeTime;
+      audio.play();
+      resumeBtn.style.display = "none";
+      let storedTimeLeft = parseInt(localStorage.getItem("listeningPart3TimeLeft") || "600");
+      let adjustedTime = storedTimeLeft - 3;
+      startTimer(Math.max(0, adjustedTime));
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      localStorage.setItem("listeningPart3AudioTime", audio.currentTime);
+    });
+
+    audio.addEventListener("seeking", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart3AudioTime") || "0");
+      if (audio.currentTime < lastTime - 3) {
+        audio.currentTime = lastTime - 3;
+      }
+    });
+
+    window.addEventListener("load", () => {
+      restoreAnswers();
+      const started = localStorage.getItem("listeningPart3Started") === "true";
+      const timeLeftStored = parseInt(localStorage.getItem("listeningPart3TimeLeft") || "600");
+
+      if (started && timeLeftStored > 0) {
+        playBtn.style.display = "none";
+        resumeBtn.style.display = "block";
+      } else {
+        playBtn.style.display = "block";
+        resumeBtn.style.display = "none";
+      }
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      collectAnswers();
+      alert("Answers submitted! (Ready for scoring or next section.)");
+    });
+  </script>
+</body>
+</html>
 

@@ -7,17 +7,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
-    .header { display: flex; align-items: center; padding: 20px 40px; border-bottom: 1px solid #ccc; background: #fff; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #ccc; background: #fff; }
     .logo { height: 60px; }
+    .student-meta { text-align: right; font-size: 14px; color: #555; }
     .container { width: 100%; max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); page-break-inside: avoid; }
-    h1, h2 { text-align: center; }
-    .score-summary { font-size: 20px; margin-top: 20px; text-align: center; }
-    .breakdown, .answers { margin-top: 30px; }
-    .answers table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .answers th, .answers td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    h1, h2 { text-align: center; margin-bottom: 10px; }
+    .score-summary { font-size: 20px; margin-top: 10px; text-align: center; }
+    .breakdown, .answers { margin-top: 20px; }
+    .answers table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    .answers th, .answers td { border: 1px solid #ddd; padding: 6px; text-align: left; }
     .correct { color: green; font-weight: bold; }
     .incorrect { color: red; font-weight: bold; }
-    .download-btn { margin: 30px auto; display: block; padding: 12px 24px; font-size: 16px; border-radius: 8px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
+    .download-btn { margin: 20px auto; display: block; padding: 10px 20px; font-size: 16px; border-radius: 8px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
     @media print {
       body { background: #fff; }
       .download-btn { display: none; }
@@ -28,6 +29,7 @@
 <body>
   <div class="header">
     <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Logo" class="logo" />
+    <div class="student-meta" id="studentMeta">Loading student info...</div>
   </div>
 
   <div class="container" id="resultContainer">
@@ -47,8 +49,13 @@
   </div>
 
   <script>
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const surname = localStorage.getItem("studentSurname") || "Student";
+    const studentNo = localStorage.getItem("studentNumber") || "N/A";
+    document.getElementById("studentMeta").textContent = `${name} ${surname} | Student No: ${studentNo}`;
+
     const correctAnswers = {
-      q1: ["dress your best", "Dress your Best],
+      q1: ["dress your best", "Dress your Best"],
       q2: ["Kirby"],
       q3: ["09356788545", "09356 788 545", "09356-788-545"],
       q4: ["extra charge", "charge"],
@@ -171,7 +178,7 @@
     function downloadPDF() {
       const element = document.getElementById("resultContainer");
       const opt = {
-        margin: 0.25,
+        margin: [0.2, 0.2],
         filename: 'Listening_Results.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },

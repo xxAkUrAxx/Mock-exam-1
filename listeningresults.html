@@ -58,7 +58,7 @@
       q11: ["plan"], q12: ["on foot"], q13: ["sensible clothes"], q14: ["weather forecast", "forecast"],
       q15: ["volunteers"], q16: ["accidents"], q17: ["finish line"],
       q18: ["c"], q19: ["b"], q20: ["e"], q21: ["c"], q22: ["b"], q23: ["a"], q24: ["c"],
-      q25: ["a"], q26: ["b"], q27: ["D", "E"], q28: ["E", "D"], q29: ["A", "C"], q30: ["C", "A"],
+      q25: ["a"], q26: ["b"], q27: ["D", "E"], q28: ["D", "E"], q29: ["A", "C"], q30: ["A", "C"],
       q31: ["rain shadow"], q32: ["few inches"], q33: ["other minerals", "minerals"], q34: ["collect"],
       q35: ["green stem", "stem"], q36: ["expand"], q37: ["white hairs"], q38: ["sharp thorns", "thorns"],
       q39: ["very tough", "tough"], q40: ["plastic"]
@@ -78,31 +78,19 @@
       const norm = str => str.replace(/[()]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase().trim();
       const normPhone = str => str.replace(/\D/g, '');
 
-      const normalizedUser = norm(userAnswer);
-      const userAnswers = userAnswer.split(/[\s,\/]+/).map(norm);
       const normalizedCorrect = correctOptions.map(norm);
 
-      // Multi-letter answers (like "A C", "D/E")
-      const isTwoLetters = correctOptions.length === 2 &&
-        correctOptions.every(opt => /^[a-eA-E]$/.test(opt.trim())) &&
-        /^[a-eA-E](\s*[,\/]?\s*[a-eA-E])?$/.test(userAnswer.trim());
-
-      if (isTwoLetters && userAnswers.length === 2) {
-        const userSet = new Set(userAnswers);
+      if (Array.isArray(userAnswer)) {
+        const userSet = new Set(userAnswer.map(norm));
         const correctSet = new Set(normalizedCorrect);
         return userSet.size === correctSet.size && [...userSet].every(val => correctSet.has(val));
       }
 
-      // Match exact single correct answer
+      const normalizedUser = norm(userAnswer);
       if (normalizedCorrect.includes(normalizedUser)) return true;
 
-      // Check phone number match
       for (let option of correctOptions) {
         if (normPhone(option) === normPhone(userAnswer)) return true;
-      }
-
-      // Loose match (for plurals/variations)
-      for (let option of correctOptions) {
         const normalizedOption = norm(option);
         if (normalizedUser.includes(normalizedOption) || normalizedOption.includes(normalizedUser)) return true;
       }
@@ -130,7 +118,8 @@
       const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
       if (isCorrect) breakdown[part]++;
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${i}</td><td>${userAns}</td><td>${correctSet.join(" / ")}</td><td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>`;
+      const displayUser = Array.isArray(userAns) ? userAns.join(" / ") : userAns;
+      row.innerHTML = `<td>${i}</td><td>${displayUser}</td><td>${correctSet.join(" / ")}</td><td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>`;
       table.appendChild(row);
     }
 

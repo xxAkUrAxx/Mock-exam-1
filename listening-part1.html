@@ -84,7 +84,8 @@
       color: #fff;
     }
     audio {
-      display: none;
+      display: none !important;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -96,13 +97,15 @@
       <div class="timer" id="timer">Time Left: 11:00</div>
     </div>
   </div>
+
   <div class="container">
     <h2>Listening – Part 1</h2>
     <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> for each answer.</p>
 
     <button id="playBtn" class="play-button">▶ Play Audio</button>
     <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
-    <audio id="audioPlayer">
+
+    <audio id="audioPlayer" preload="none" tabindex="-1" controlsList="nodownload noplaybackrate nofullscreen">
       <source src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/Test1_Part1.mp3" type="audio/mp3" />
     </audio>
 
@@ -222,10 +225,16 @@
 
     window.addEventListener("load", () => {
       restoreAnswers();
+
       const started = localStorage.getItem("listeningPart1Started") === "true";
-      if (started) {
+      const timeLeftStored = parseInt(localStorage.getItem("listeningPart1TimeLeft") || "660");
+
+      if (started && timeLeftStored > 0) {
         playBtn.style.display = "none";
         resumeBtn.style.display = "block";
+      } else {
+        playBtn.style.display = "block";
+        resumeBtn.style.display = "none";
       }
     });
 

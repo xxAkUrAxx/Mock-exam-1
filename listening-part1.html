@@ -106,7 +106,7 @@
     <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
 
     <audio id="audioPlayer" preload="none" tabindex="-1" controlsList="nodownload noplaybackrate nofullscreen">
-     <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part1.mp3" type="audio/mp3" />
+      <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part1.mp3" type="audio/mp3" />
     </audio>
 
     <form id="testForm">
@@ -225,7 +225,6 @@
 
     window.addEventListener("load", () => {
       restoreAnswers();
-
       const started = localStorage.getItem("listeningPart1Started") === "true";
       const timeLeftStored = parseInt(localStorage.getItem("listeningPart1TimeLeft") || "660");
 
@@ -241,7 +240,8 @@
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       collectAnswers();
-      alert("Answers submitted! (Ready for scoring or next section.)");
+      alert("Answers submitted! Moving to Part 2...");
+      window.location.href = "listening-part2.html";
     });
   </script>
 </body>

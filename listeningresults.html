@@ -7,18 +7,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body { font-family: 'Segoe UI', sans-serif; background: #fff; margin: 0; padding: 0; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #fff; }
-    .logo { height: 50px; }
-    .student-meta { text-align: right; font-size: 12px; color: #555; }
-    .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 10px 20px; page-break-inside: avoid; }
-    h1, h2 { text-align: center; margin-bottom: 8px; font-size: 18px; }
-    .score-summary { font-size: 14px; margin-top: 10px; text-align: center; }
-    .breakdown, .answers { margin-top: 15px; }
-    .answers table { width: 100%; border-collapse: collapse; font-size: 9px; table-layout: fixed; }
-    .answers th, .answers td { padding: 2px 4px; text-align: left; word-wrap: break-word; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #fff; }
+    .logo { height: 60px; }
+    .student-meta { text-align: right; font-size: 14px; color: #555; }
+    .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 30px; page-break-inside: avoid; }
+    h1, h2 { text-align: center; margin-bottom: 12px; font-size: 24px; }
+    .score-summary { font-size: 18px; margin-top: 20px; text-align: center; }
+    .breakdown, .answers { margin-top: 30px; font-size: 16px; }
+    .answers table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .answers th, .answers td { padding: 8px 10px; text-align: left; vertical-align: top; }
     .correct { color: green; font-weight: bold; }
     .incorrect { color: red; font-weight: bold; }
-    .download-btn { margin: 20px auto; display: block; padding: 6px 12px; font-size: 12px; border-radius: 5px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
+    .download-btn { margin: 30px auto; display: block; padding: 12px 24px; font-size: 16px; border-radius: 8px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
+    .two-column { columns: 2; -webkit-columns: 2; -moz-columns: 2; column-gap: 40px; }
     @media print {
       .download-btn { display: none; }
     }
@@ -36,12 +37,14 @@
     <div class="breakdown" id="partBreakdown"></div>
     <div class="answers">
       <h2>Answer Sheet</h2>
-      <table id="answerTable">
-        <thead>
-          <tr><th>Q</th><th>Your Answer</th><th>Correct</th><th>Status</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="two-column">
+        <table id="answerTable">
+          <thead>
+            <tr><th>Q</th><th>Your Answer</th><th>Correct</th><th>Status</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
     <button class="download-btn" onclick="downloadPDF()">Download PDF Report</button>
   </div>
@@ -153,7 +156,7 @@
 
     document.getElementById("partBreakdown").innerHTML = `
       <h2>📊 Part-by-Part Breakdown</h2>
-      <ul style="list-style: none; padding-left: 0; font-size: 10px;">
+      <ul style="list-style: none; padding-left: 0; font-size: 16px;">
         <li>Part 1: ${breakdown["Part 1"]} / 10</li>
         <li>Part 2: ${breakdown["Part 2"]} / 10</li>
         <li>Part 3: ${breakdown["Part 3"]} / 10</li>

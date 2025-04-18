@@ -43,14 +43,44 @@
 
   <script>
     const correctAnswers = {
-      q1: ["kt ltd"], q2: ["hillman"], q3: ["07718 732987"], q4: ["extra charge", "charge"], q5: ["mastercard"],
-      q6: ["black", "dark"], q7: ["glass desk", "glass desks"], q8: ["tg586", "tg 586"], q9: ["yellow"], q10: ["coffee table"],
-      q11: ["plan"], q12: ["early"], q13: ["comfortable shoes"], q14: ["weather forecast"], q15: ["volunteers"],
-      q16: ["crossing the road"], q17: ["finish line"], q18: ["b"], q19: ["c"], q20: ["a"],
-      q21: ["c"], q22: ["b"], q23: ["c"], q24: ["a"], q25: ["c"], q26: ["b"],
-      q27_28: ["d", "e"], q29_30: ["a", "c"],
-      q31: ["rain shadow"], q32: ["few centimetres"], q33: ["minerals"], q34: ["absorb"], q35: ["stem"],
-      q36: ["expand"], q37: ["white hairs"], q38: ["spines"], q39: ["curved"], q40: ["waxy coating", "waxy"]
+      q1: ["Dress your Best"],
+      q2: ["Kirby"],
+      q3: ["09356 788 545"],
+      q4: ["(extra) charge", "extra charge", "charge"],
+      q5: ["American Express"],
+      q6: ["black", "dark"],
+      q7: ["Glass desk", "Glass desks"],
+      q8: ["TG 586", "TG586"],
+      q9: ["yellow"],
+      q10: ["coffee table"],
+      q11: ["plan"],
+      q12: ["on foot"],
+      q13: ["sensible clothes"],
+      q14: ["(weather) forecast", "forecast"],
+      q15: ["volunteers"],
+      q16: ["accidents"],
+      q17: ["finish line"],
+      q18: ["C"],
+      q19: ["B"],
+      q20: ["E"],
+      q21: ["C"],
+      q22: ["B"],
+      q23: ["A"],
+      q24: ["C"],
+      q25: ["A"],
+      q26: ["B"],
+      q27_28: ["D", "E"],
+      q29_30: ["A", "C"],
+      q31: ["rain shadow"],
+      q32: ["few inches"],
+      q33: ["(other) minerals", "minerals"],
+      q34: ["collect"],
+      q35: ["(green) stem", "stem"],
+      q36: ["expand"],
+      q37: ["white hairs"],
+      q38: ["(sharp) thorns", "sharp thorns", "thorns"],
+      q39: ["(very) tough", "very tough", "tough"],
+      q40: ["plastic"]
     };
 
     const allAnswers = {
@@ -67,8 +97,13 @@
       'Part 4': [31, 40]
     };
 
-    function normalize(str) {
-      return str.toLowerCase().replace(/\s+/g, ' ').trim();
+    function isAnswerCorrect(userAnswer, acceptedAnswers, allowCapitalizationFlex = false) {
+      const trimmedAnswer = userAnswer.trim();
+      return acceptedAnswers.some(correct => {
+        return allowCapitalizationFlex
+          ? correct.trim().toLowerCase() === trimmedAnswer.toLowerCase()
+          : correct.trim() === trimmedAnswer;
+      });
     }
 
     let totalCorrect = 0;
@@ -80,7 +115,13 @@
       const q = `q${i}`;
       const userAnswer = allAnswers[q] || "";
       const answerSet = correctAnswers[q] || [];
-      const isCorrect = answerSet.some(correct => normalize(correct) === normalize(userAnswer));
+
+      let isCorrect = false;
+      if (q === "q1" || q === "q5") {
+        isCorrect = isAnswerCorrect(userAnswer, answerSet, true);
+      } else {
+        isCorrect = isAnswerCorrect(userAnswer, answerSet);
+      }
 
       if (isCorrect) totalCorrect++;
 
@@ -134,4 +175,3 @@
   </script>
 </body>
 </html>
-

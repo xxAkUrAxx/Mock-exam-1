@@ -130,7 +130,7 @@
         const userSet = new Set(userGroupAnswers.map(a => a.toUpperCase()));
         const correctSetUpper = new Set(group.correct.map(a => a.toUpperCase()));
         const matchCount = [...userSet].filter(v => correctSetUpper.has(v)).length;
-        let groupDisplay = [...new Set(userGroupAnswers)].join(" / ");
+        let groupDisplay = group.correct.join(" / ");
 
         group.questions.forEach(q => usedQuestions.add(q));
         let rowSpan = group.questions.length;
@@ -139,7 +139,7 @@
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${q}</td>
-            <td>${index === 0 ? groupDisplay : ""}</td>
+            <td>${userGroupAnswers.join(" / ")}</td>
             <td>${index === 0 ? group.correct.join(" / ") : ""}</td>
             <td class="${index === 0 ? (matchCount === 2 ? 'correct' : matchCount === 1 ? 'partial' : 'incorrect') : ''}">
               ${index === 0 ? (matchCount === 2 ? '✅' : matchCount === 1 ? '☑️' : '❌') : ''}

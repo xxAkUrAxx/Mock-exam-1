@@ -55,7 +55,7 @@
     document.getElementById("studentMeta").textContent = `${name} ${surname} | Student No: ${studentNo}`;
 
     const correctAnswers = {
-      q1: ["dress your best", "Dress your Best"],
+      q1: ["dress your best", "dress your best"],
       q2: ["Kirby"],
       q3: ["09356788545", "09356 788 545", "09356-788-545"],
       q4: ["extra charge", "charge"],
@@ -72,19 +72,19 @@
       q15: ["volunteers"],
       q16: ["accidents"],
       q17: ["finish line"],
-      q18: ["c", "C"],
-      q19: ["b", "B"],
-      q20: ["e", "E"],
-      q21: ["c", "C"],
-      q22: ["b", "B"],
-      q23: ["a", "A"],
-      q24: ["c", "C"],
-      q25: ["a", "A"],
-      q26: ["b", "B"],
-      q27: ["d", "e", "D", "E"],
-      q28: ["e", "E", "D", "d"],
-      q29: ["a", "c", "A", "C"],
-      q30: ["c", "a", "C", "A"],
+      q18: ["c"],
+      q19: ["b"],
+      q20: ["e"],
+      q21: ["c"],
+      q22: ["b"],
+      q23: ["a"],
+      q24: ["c"],
+      q25: ["a"],
+      q26: ["b"],
+      q27: ["d", "e"],
+      q28: ["e", "d"],
+      q29: ["a", "c"],
+      q30: ["c", "a"],
       q31: ["rain shadow"],
       q32: ["few inches"],
       q33: ["other minerals", "minerals"],
@@ -108,6 +108,11 @@
     function isCorrectAnswer(userAnswer, correctOptions) {
       const normUser = normalize(userAnswer);
       if (!normUser) return false;
+
+      const allLetters = correctOptions.every(opt => /^[a-z]$/i.test(opt.trim()));
+      if (allLetters) {
+        return correctOptions.map(opt => opt.toLowerCase()).includes(normUser.toLowerCase());
+      }
 
       for (let option of correctOptions) {
         if (normalizePhone(option) === normalizePhone(normUser)) return true;

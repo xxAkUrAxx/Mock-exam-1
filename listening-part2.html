@@ -48,6 +48,7 @@
       <div class="timer" id="timer">Time Left: 9:00</div>
     </div>
   </div>
+
   <div class="container">
     <h2>Listening – Part 2</h2>
     <p class="instructions">Click play and answer the questions as you listen. Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
@@ -225,9 +226,9 @@
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       collectAnswers();
-      alert("Answers submitted! (Ready for scoring or next section.)");
+      alert("Answers submitted! Moving to Part 3...");
+      window.location.href = "listening-part3.html";
     });
   </script>
 </body>
 </html>
-

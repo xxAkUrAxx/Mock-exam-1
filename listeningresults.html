@@ -58,7 +58,8 @@
       q11: ["plan"], q12: ["on foot"], q13: ["sensible clothes"], q14: ["weather forecast", "forecast"],
       q15: ["volunteers"], q16: ["accidents"], q17: ["finish line"],
       q18: ["c"], q19: ["b"], q20: ["e"], q21: ["c"], q22: ["b"], q23: ["a"], q24: ["c"],
-      q25: ["a"], q26: ["b"], q27: ["D", "E"], q28: ["D", "E"], q29: ["A", "C"], q30: ["A", "C"],
+      q25: ["a"], q26: ["b"],
+      q27: ["D", "E"], q28: ["D", "E"], q29: ["A", "C"], q30: ["A", "C"],
       q31: ["rain shadow"], q32: ["few inches"], q33: ["other minerals", "minerals"], q34: ["collect"],
       q35: ["green stem", "stem"], q36: ["expand"], q37: ["white hairs"], q38: ["sharp thorns", "thorns"],
       q39: ["very tough", "tough"], q40: ["plastic"]
@@ -75,23 +76,20 @@
     function isCorrectAnswer(userAnswer, correctOptions) {
       if (!userAnswer || correctOptions.length === 0) return false;
 
-      const norm = str => str.replace(/[()]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase().trim();
-      const normPhone = str => str.replace(/\D/g, '');
-
-      const normalizedCorrect = correctOptions.map(norm);
+      const normalizedCorrect = correctOptions.map(normalize);
 
       if (Array.isArray(userAnswer)) {
-        const userSet = new Set(userAnswer.map(norm));
+        const userSet = new Set(userAnswer.map(normalize));
         const correctSet = new Set(normalizedCorrect);
         return userSet.size === correctSet.size && [...userSet].every(val => correctSet.has(val));
       }
 
-      const normalizedUser = norm(userAnswer);
+      const normalizedUser = normalize(userAnswer);
       if (normalizedCorrect.includes(normalizedUser)) return true;
 
       for (let option of correctOptions) {
-        if (normPhone(option) === normPhone(userAnswer)) return true;
-        const normalizedOption = norm(option);
+        if (normalizePhone(option) === normalizePhone(userAnswer)) return true;
+        const normalizedOption = normalize(option);
         if (normalizedUser.includes(normalizedOption) || normalizedOption.includes(normalizedUser)) return true;
       }
 

@@ -18,6 +18,7 @@
     table { width: 100%; border-collapse: collapse; margin: auto; }
     th, td { padding: 4px; text-align: left; vertical-align: top; }
     .correct { color: green; font-weight: bold; }
+    .partial { color: orange; font-weight: bold; }
     .incorrect { color: red; font-weight: bold; }
     .download-btn { display: block; margin: 20px auto; padding: 8px 16px; font-size: 12px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
     @media print { .download-btn { display: none; } }
@@ -75,24 +76,19 @@
 
     function isCorrectAnswer(userAnswer, correctOptions) {
       if (!userAnswer || correctOptions.length === 0) return false;
-
       const normalizedCorrect = correctOptions.map(normalize);
-
       if (Array.isArray(userAnswer)) {
         const userSet = new Set(userAnswer.map(normalize));
         const correctSet = new Set(normalizedCorrect);
         return userSet.size === correctSet.size && [...userSet].every(val => correctSet.has(val));
       }
-
       const normalizedUser = normalize(userAnswer);
       if (normalizedCorrect.includes(normalizedUser)) return true;
-
       for (let option of correctOptions) {
         if (normalizePhone(option) === normalizePhone(userAnswer)) return true;
         const normalizedOption = normalize(option);
         if (normalizedUser.includes(normalizedOption) || normalizedOption.includes(normalizedUser)) return true;
       }
-
       return false;
     }
 
@@ -103,6 +99,7 @@
       ...JSON.parse(localStorage.getItem("listeningPart4Answers") || '{}')
     };
 
+    const partialScoreMap = JSON.parse(localStorage.getItem("listeningPart3Answers") || '{}');
     const table = document.querySelector("#answerTable tbody");
     let total = 0;
     const breakdown = { "Part 1": 0, "Part 2": 0, "Part 3": 0, "Part 4": 0 };
@@ -111,13 +108,40 @@
       const qKey = `q${i}`;
       const userAns = answers[qKey] || "";
       const correctSet = correctAnswers[qKey] || [];
-      const isCorrect = isCorrectAnswer(userAns, correctSet);
-      if (isCorrect) total++;
-      const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
-      if (isCorrect) breakdown[part]++;
+      let isCorrect = false;
+      let statusClass = "incorrect";
+      let symbol = "❌";
+      let displayUser = Array.isArray(userAns) ? userAns.join(" / ") : userAns;
+
+      if ([27, 28, 29, 30].includes(i)) {
+        const correctPair = correctAnswers[qKey].map(a => a.toUpperCase());
+        const userValues = Array.isArray(userAns) ? userAns.map(a => a.toUpperCase()) : [];
+        const matchCount = userValues.filter(a => correctPair.includes(a)).length;
+        if (matchCount === 2) {
+          isCorrect = true;
+          statusClass = "correct";
+          symbol = "✅";
+          total += 2;
+          breakdown["Part 3"] += 2;
+        } else if (matchCount === 1) {
+          statusClass = "partial";
+          symbol = "☑️";
+          total += 1;
+          breakdown["Part 3"] += 1;
+        }
+      } else {
+        isCorrect = isCorrectAnswer(userAns, correctSet);
+        if (isCorrect) {
+          total++;
+          const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
+          breakdown[part]++;
+          statusClass = "correct";
+          symbol = "✅";
+        }
+      }
+
       const row = document.createElement("tr");
-      const displayUser = Array.isArray(userAns) ? userAns.join(" / ") : userAns;
-      row.innerHTML = `<td>${i}</td><td>${displayUser}</td><td>${correctSet.join(" / ")}</td><td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>`;
+      row.innerHTML = `<td>${i}</td><td>${displayUser}</td><td>${correctSet.join(" / ")}</td><td class="${statusClass}">${symbol}</td>`;
       table.appendChild(row);
     }
 

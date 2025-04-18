@@ -9,7 +9,7 @@
     body { font-family: 'Segoe UI', sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
     .header { display: flex; align-items: center; padding: 20px 40px; border-bottom: 1px solid #ccc; background: #fff; }
     .logo { height: 60px; }
-    .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    .container { width: 100%; max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05); page-break-inside: avoid; }
     h1, h2 { text-align: center; }
     .score-summary { font-size: 20px; margin-top: 20px; text-align: center; }
     .breakdown, .answers { margin-top: 30px; }
@@ -18,6 +18,11 @@
     .correct { color: green; font-weight: bold; }
     .incorrect { color: red; font-weight: bold; }
     .download-btn { margin: 30px auto; display: block; padding: 12px 24px; font-size: 16px; border-radius: 8px; background: #007BFF; color: #fff; border: none; cursor: pointer; }
+    @media print {
+      body { background: #fff; }
+      .download-btn { display: none; }
+      .container { box-shadow: none; }
+    }
   </style>
 </head>
 <body>
@@ -43,14 +48,14 @@
 
   <script>
     const correctAnswers = {
-      q1: ["Dress your Best"],
+      q1: ["dress your best", "Dress your Best],
       q2: ["Kirby"],
       q3: ["09356788545", "09356 788 545", "09356-788-545"],
       q4: ["extra charge", "charge"],
-      q5: ["American Express"],
+      q5: ["american express", "American Express"],
       q6: ["black", "dark"],
-      q7: ["Glass desk", "Glass desks"],
-      q8: ["TG 586", "TG586"],
+      q7: ["glass desk", "glass desks"],
+      q8: ["tg 586", "tg586"],
       q9: ["yellow"],
       q10: ["coffee table"],
       q11: ["plan"],
@@ -60,17 +65,19 @@
       q15: ["volunteers"],
       q16: ["accidents"],
       q17: ["finish line"],
-      q18: ["C"],
-      q19: ["B"],
-      q20: ["E"],
-      q21: ["C"],
-      q22: ["B"],
-      q23: ["A"],
-      q24: ["C"],
-      q25: ["A"],
-      q26: ["B"],
-      q27_28: ["D", "E"],
-      q29_30: ["A", "C"],
+      q18: ["c", "C"],
+      q19: ["b", "B"],
+      q20: ["e", "E"],
+      q21: ["c", "C"],
+      q22: ["b", "B"],
+      q23: ["a", "A"],
+      q24: ["c", "C"],
+      q25: ["a", "A"],
+      q26: ["b", "B"],
+      q27: ["d", "e", "D", "E"],
+      q28: ["e", "E", "D", "d"],
+      q29: ["a", "c", "A", "C"],
+      q30: ["c", "a", "C", "A"],
       q31: ["rain shadow"],
       q32: ["few inches"],
       q33: ["other minerals", "minerals"],
@@ -83,83 +90,61 @@
       q40: ["plastic"]
     };
 
+    function normalize(str) {
+      return str.replace(/[()]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+    }
+
     function normalizePhone(str) {
       return str.replace(/\D/g, '');
     }
 
-    function stripBrackets(text) {
-      return text.replace(/[()]/g, '').trim();
+    function isCorrectAnswer(userAnswer, correctOptions) {
+      const normUser = normalize(userAnswer);
+      if (!normUser) return false;
+
+      for (let option of correctOptions) {
+        if (normalizePhone(option) === normalizePhone(normUser)) return true;
+        if (normalize(option) === normUser) return true;
+      }
+      return false;
     }
 
-    function isAnswerCorrect(userAnswer, acceptedAnswers, allowCapitalizationFlex = false, normalizePhoneOnly = false) {
-      const trimmedAnswer = userAnswer.trim();
-      return acceptedAnswers.some(correct => {
-        const cleanCorrect = stripBrackets(correct);
-        const cleanUser = stripBrackets(trimmedAnswer);
-        if (normalizePhoneOnly) {
-          return normalizePhone(cleanCorrect) === normalizePhone(cleanUser);
-        }
-        return allowCapitalizationFlex
-          ? cleanCorrect.toLowerCase() === cleanUser.toLowerCase()
-          : cleanCorrect === cleanUser;
-      });
-    }
-
-    const allAnswers = {
+    const answers = {
       ...JSON.parse(localStorage.getItem("listeningPart1Answers") || '{}'),
       ...JSON.parse(localStorage.getItem("listeningPart2Answers") || '{}'),
       ...JSON.parse(localStorage.getItem("listeningPart3Answers") || '{}'),
       ...JSON.parse(localStorage.getItem("listeningPart4Answers") || '{}')
     };
 
-    const partRanges = {
-      'Part 1': [1, 10],
-      'Part 2': [11, 20],
-      'Part 3': [21, 30],
-      'Part 4': [31, 40]
-    };
-
-    let totalCorrect = 0;
-    const partCorrect = { 'Part 1': 0, 'Part 2': 0, 'Part 3': 0, 'Part 4': 0 };
-
-    const tableBody = document.querySelector('#answerTable tbody');
+    const table = document.querySelector("#answerTable tbody");
+    let total = 0;
+    const breakdown = { "Part 1": 0, "Part 2": 0, "Part 3": 0, "Part 4": 0 };
 
     for (let i = 1; i <= 40; i++) {
-      const q = `q${i}`;
-      const userAnswer = allAnswers[q] || "";
-      const answerSet = correctAnswers[q] || [];
+      const qKey = `q${i}`;
+      const userAns = answers[qKey] || "";
+      const correctSet = correctAnswers[qKey] || [];
+      const isCorrect = isCorrectAnswer(userAns, correctSet);
+      if (isCorrect) total++;
 
-      let isCorrect = false;
-      if (q === "q1" || q === "q5") {
-        isCorrect = isAnswerCorrect(userAnswer, answerSet, true);
-      } else if (q === "q3") {
-        isCorrect = isAnswerCorrect(userAnswer, answerSet, false, true);
-      } else {
-        isCorrect = isAnswerCorrect(userAnswer, answerSet);
-      }
+      const part = i <= 10 ? "Part 1" : i <= 20 ? "Part 2" : i <= 30 ? "Part 3" : "Part 4";
+      if (isCorrect) breakdown[part]++;
 
-      if (isCorrect) totalCorrect++;
-
-      for (let part in partRanges) {
-        const [start, end] = partRanges[part];
-        if (i >= start && i <= end && isCorrect) partCorrect[part]++;
-      }
-
-      const row = document.createElement('tr');
+      const row = document.createElement("tr");
       row.innerHTML = `
         <td>${i}</td>
-        <td>${userAnswer}</td>
-        <td>${answerSet.join(" / ")}</td>
+        <td>${userAns}</td>
+        <td>${correctSet.join(" / ")}</td>
         <td class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✅' : '❌'}</td>
       `;
-      tableBody.appendChild(row);
+      table.appendChild(row);
     }
 
     function getBand(score) {
       if (score >= 39) return "9.0";
       if (score >= 37) return "8.5";
       if (score >= 35) return "8.0";
-      if (score >= 32) return "7.5";
+      if (score >= 33) return "7.5";
       if (score >= 30) return "7.0";
       if (score >= 26) return "6.5";
       if (score >= 23) return "6.0";
@@ -167,25 +152,33 @@
       if (score >= 16) return "5.0";
       if (score >= 13) return "4.5";
       if (score >= 10) return "4.0";
-      if (score >= 6) return "3.5";
-      if (score >= 4) return "3.0";
+      if (score >= 7) return "3.5";
+      if (score >= 5) return "3.0";
       return "2.5";
     }
 
-    const band = getBand(totalCorrect);
-    document.getElementById("summaryText").innerHTML = `🎉 You got <strong>${totalCorrect} out of 40</strong> correct.<br>🏅 Your estimated IELTS Band Score is <strong>${band}</strong>`;
+    document.getElementById("summaryText").innerHTML = `🎯 You got <strong>${total} out of 40</strong> correct.<br>🥇 Estimated IELTS Academic Band Score: <strong>${getBand(total)}</strong>`;
 
-    let breakdownHTML = '<h2>📊 Part-by-Part Breakdown</h2><ul style="list-style:none; padding-left:0;">';
-    for (let part in partRanges) {
-      const score = partCorrect[part];
-      breakdownHTML += `<li>${part}: ${score} / 10 ${score >= 7 ? '✅' : score >= 5 ? '⚠️' : '❌'}</li>`;
-    }
-    breakdownHTML += '</ul>';
-    document.getElementById("partBreakdown").innerHTML = breakdownHTML;
+    document.getElementById("partBreakdown").innerHTML = `
+      <h2>📊 Part-by-Part Breakdown</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>Part 1: ${breakdown["Part 1"]} / 10</li>
+        <li>Part 2: ${breakdown["Part 2"]} / 10</li>
+        <li>Part 3: ${breakdown["Part 3"]} / 10</li>
+        <li>Part 4: ${breakdown["Part 4"]} / 10</li>
+      </ul>`;
 
     function downloadPDF() {
       const element = document.getElementById("resultContainer");
-      html2pdf().set({ margin: 0.5, filename: 'Listening_Results.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+      const opt = {
+        margin: 0.25,
+        filename: 'Listening_Results.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+      html2pdf().set(opt).from(element).save();
     }
   </script>
 </body>

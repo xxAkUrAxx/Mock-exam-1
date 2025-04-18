@@ -99,7 +99,6 @@
       ...JSON.parse(localStorage.getItem("listeningPart4Answers") || '{}')
     };
 
-    const partialScoreMap = JSON.parse(localStorage.getItem("listeningPart3Answers") || '{}');
     const table = document.querySelector("#answerTable tbody");
     let total = 0;
     const breakdown = { "Part 1": 0, "Part 2": 0, "Part 3": 0, "Part 4": 0 };
@@ -114,7 +113,7 @@
       let displayUser = Array.isArray(userAns) ? userAns.join(" / ") : userAns;
 
       if ([27, 28, 29, 30].includes(i)) {
-        const correctPair = correctAnswers[qKey].map(a => a.toUpperCase());
+        const correctPair = correctSet.map(a => a.toUpperCase());
         const userValues = Array.isArray(userAns) ? userAns.map(a => a.toUpperCase()) : [];
         const matchCount = userValues.filter(a => correctPair.includes(a)).length;
         if (matchCount === 2) {

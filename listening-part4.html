@@ -1,1 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listening – Part 4</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #fff; margin: 0; padding: 0; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 40px 10px; border-bottom: 1px solid #ddd; }
+    .logo { height: 60px; }
+    .student-info { text-align: right; font-size: 16px; font-weight: 500; color: #333; }
+    .timer { font-size: 14px; margin-top: 5px; color: #d00; font-weight: bold; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    h2 { text-align: center; margin-top: 0; }
+    .instructions { margin: 20px 0; font-style: italic; font-size: 15px; }
+    input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 6px 10px;
+      font-size: 15px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      margin: 8px 0;
+    }
+    ul { list-style-type: disc; padding-left: 20px; }
+    .submit-btn, .play-button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      border: 2px solid #000;
+      background-color: #28a745;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .submit-btn:hover, .play-button:hover { background-color: #000; color: #fff; }
+    audio { display: none !important; pointer-events: none; }
+    strong { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/xxAkUrAxx/Mock-exam-1/main/wse-logo.png" alt="Logo" class="logo" />
+    <div class="student-info">
+      <div id="studentInfo">Loading...</div>
+      <div class="timer" id="timer">Time Left: 10:00</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Listening – Part 4</h2>
+    <p class="instructions">Complete the notes below. Write <strong>NO MORE THAN TWO WORDS</strong> for each answer.</p>
+
+    <button id="playBtn" class="play-button">▶ Play Audio</button>
+    <button id="resumeBtn" class="play-button" style="display:none;">⏯ Resume Audio</button>
+
+    <audio id="audioPlayer" preload="none">
+      <source src="https://xxakuraxx.github.io/Mock-exam-1/Test1_Part4.mp3" type="audio/mp3">
+    </audio>
+
+    <form id="testForm">
+      <h3>Desert Plants</h3>
+
+      <strong>Background</strong>
+      <ul>
+        <li>Deserts found in what is known as a <strong>31</strong> <input type="text" name="q31" /> (or dry area)</li>
+        <li>Annual rainfall, if any, amounts to a <strong>32</strong> <input type="text" name="q32" /></li>
+        <li>Soil contains a lot of salt and <strong>33</strong> <input type="text" name="q33" /></li>
+      </ul>
+
+      <strong>General adaptation of desert plants</strong>
+      <ul>
+        <li>They can <strong>34</strong> <input type="text" name="q34" /> and store water.</li>
+        <li>They have features that reduce water loss.</li>
+      </ul>
+
+      <strong>Examples of adaptations</strong>
+      <ul>
+        <li><strong>Saguaro Cactus:</strong> stores water in its <strong>35</strong> <input type="text" name="q35" /></li>
+        <li><strong>Barrel Cactus:</strong> can <strong>36</strong> <input type="text" name="q36" /> or shrink according to the weather</li>
+        <li><strong>Old Man Cactus:</strong> has <strong>37</strong> <input type="text" name="q37" /> that reflect the sun</li>
+        <li><strong>Prickly Pear Cactus:</strong> has <strong>38</strong> <input type="text" name="q38" /> to keep away the animals</li>
+        <li><strong>Desert Spoon:</strong> leaves are <strong>39</strong> <input type="text" name="q39" /> to reduce water loss</li>
+        <li><strong>Aloe Plant:</strong> leaf surface acts like a <strong>40</strong> <input type="text" name="q40" /> covering and keeps water inside</li>
+      </ul>
+
+      <button class="submit-btn" type="submit">Get Result</button>
+    </form>
+  </div>
+
+  <script>
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const surname = localStorage.getItem("studentSurname") || "Student";
+    const studentNo = localStorage.getItem("studentNumber") || "N/A";
+    document.getElementById("studentInfo").textContent = `${name} | ${surname} | ${studentNo}`;
+
+    const timerEl = document.getElementById("timer");
+    const playBtn = document.getElementById("playBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const audio = document.getElementById("audioPlayer");
+    const form = document.getElementById("testForm");
+
+    let timeLeft = 600;
+    let timerInterval;
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    function collectAnswers() {
+      const answers = {};
+      const inputs = form.querySelectorAll("input[type='text']");
+      inputs.forEach(input => {
+        answers[input.name] = input.value.trim();
+      });
+      localStorage.setItem("listeningPart4Answers", JSON.stringify(answers));
+    }
+
+    function restoreAnswers() {
+      const saved = JSON.parse(localStorage.getItem("listeningPart4Answers") || "{}");
+      Object.entries(saved).forEach(([key, val]) => {
+        const el = form.querySelector(`[name="${key}"]`);
+        if (el) el.value = val;
+      });
+    }
+
+    function disableForm() {
+      const inputs = form.querySelectorAll("input[type='text']");
+      inputs.forEach(input => input.disabled = true);
+    }
+
+    function startTimer(remaining = 600) {
+      timeLeft = remaining;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        localStorage.setItem("listeningPart4TimeLeft", timeLeft);
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          collectAnswers();
+          disableForm();
+          alert("Time's up! This section is now closed.");
+        }
+      }, 1000);
+    }
+
+    playBtn.addEventListener("click", () => {
+      audio.currentTime = 0;
+      audio.play();
+      playBtn.style.display = "none";
+      resumeBtn.style.display = "none";
+      localStorage.setItem("listeningPart4Started", "true");
+      startTimer();
+    });
+
+    resumeBtn.addEventListener("click", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart4AudioTime") || "0");
+      const resumeTime = Math.max(0, lastTime - 3);
+      audio.currentTime = resumeTime;
+      audio.play();
+      resumeBtn.style.display = "none";
+      let storedTimeLeft = parseInt(localStorage.getItem("listeningPart4TimeLeft") || "600");
+      let adjustedTime = storedTimeLeft - 3;
+      startTimer(Math.max(0, adjustedTime));
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      localStorage.setItem("listeningPart4AudioTime", audio.currentTime);
+    });
+
+    audio.addEventListener("seeking", () => {
+      const lastTime = parseFloat(localStorage.getItem("listeningPart4AudioTime") || "0");
+      if (audio.currentTime < lastTime - 3) {
+        audio.currentTime = lastTime - 3;
+      }
+    });
+
+    window.addEventListener("load", () => {
+      restoreAnswers();
+      const started = localStorage.getItem("listeningPart4Started") === "true";
+      const timeLeftStored = parseInt(localStorage.getItem("listeningPart4TimeLeft") || "600");
+
+      if (started && timeLeftStored > 0) {
+        playBtn.style.display = "none";
+        resumeBtn.style.display = "block";
+      } else {
+        playBtn.style.display = "block";
+        resumeBtn.style.display = "none";
+      }
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      collectAnswers();
+      alert("All answers submitted. Redirecting to your results...");
+      window.location.href = "listeningresults.html";
+    });
+  </script>
+</body>
+</html>
 
